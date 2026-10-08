@@ -7,7 +7,7 @@ Personal, read-only dashboard: ingests my sports bets from Kalshi and Polymarket
 - Read-only. Never call order create/cancel/modify endpoints on either venue.
 - Polymarket US only (`api.polymarket.us`, `gateway.polymarket.us`). Never use global Polymarket Gamma/CLOB/Data API docs or code.
 - Never print, log, or commit secrets. Credentials live in `.env` and `secrets/` (both gitignored).
-- Test fixtures from real API responses must have account IDs and balances scrubbed. The repo may go public later.
+- The repo is public. Test fixtures from real API responses must have account IDs and balances scrubbed. Keep personal dollar figures (P&L, stakes, bankroll, rewards) out of docs and commits; state findings in cents, counts and CIs.
 - `raw_pages` is the append-only source of truth; every other table must be rebuildable from it. Only exception: `data/manual_cash.csv` (hand-entered cash the APIs don't expose, e.g. Kalshi rewards).
 - Timestamps in UTC. Money as integer micro-dollars.
 - Build one phase at a time (see `docs/roadmap.md`). Don't build ahead of the current phase.
