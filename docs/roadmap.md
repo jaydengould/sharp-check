@@ -20,7 +20,7 @@ Sync is on demand (CLI or Dash button). No scheduler or always-on host in v1.
 
 ## Next up
 
-Every session starts with: `python -m sharp_check.archive && python -m sharp_check.normalize && python -m sharp_check.reconcile`. Archive also rebuilds and fetches closes for newly started games. A reconcile mismatch usually means a new Kalshi reward is missing from `data/manual_cash.csv`.
+Every session starts with: `python -m sharp_check.archive && python -m sharp_check.normalize && python -m sharp_check.reconcile` (or the dashboard's Sync button, which runs archive; the header shows the reconcile check). Archive also rebuilds and fetches closes for newly started games. A reconcile mismatch usually means a new Kalshi reward is missing from `data/manual_cash.csv`.
 
 Phase 4 (done 2026-10-03): all 44 eligible bets have a market close. Mean CLV vs mid −0.0¢ (CI −0.7 to +0.7); after entry fees −1.3¢ (CI −1.95 to −0.6); price move vs close ask +0.8¢.
 
@@ -105,3 +105,4 @@ None right now.
 - Injury and weather dimensions.
 - Cash-out calculator, with fair value from the sharp line or a cross-venue price, never from the same market.
 - Logging my own probability per bet for Brier score.
+- Reverse line movement tab (brainstormed 2026-10-08, not decided). Neither venue publishes betting splits, so true RLM is out. Closest proxy: Kalshi trade tape, trade count vs size against price direction (unverified that the public trades endpoint carries taker side and size; Polymarket US has no known public tape). Cheaper fallback: open-to-now movement from existing price history. Third-party splits rejected (scraping, ToS). Worth it only if a backtest over many games, not just mine, shows flagged sides beat the close.
