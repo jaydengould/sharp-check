@@ -125,3 +125,16 @@ def test_habits_has_a_line_shopping_section_on_an_empty_db():
     conn = archive.connect(":memory:")
     normalize.rebuild(conn)
     assert "Line shopping" in str(app.habits_tab(conn))
+
+
+def test_sync_reloads_on_success_and_names_failures(monkeypatch):
+    class Run:
+        def __init__(self, code, out="", err=""):
+            self.returncode, self.stdout, self.stderr = code, out, err
+    monkeypatch.setattr(app.subprocess, "run", lambda *a, **k: Run(0))
+    assert app.sync(1) == ("/", "")
+    out = "kalshi     /portfolio/fills    pages=2 new=0\npolymarket close abc FAILED: HTTPError: 503\n"
+    monkeypatch.setattr(app.subprocess, "run", lambda *a, **k: Run(1, out))
+    assert "polymarket close abc" in app.sync(1)[1]
+    monkeypatch.setattr(app.subprocess, "run", lambda *a, **k: Run(1, "", "Traceback\nKeyError: 'secret'"))
+    assert app.sync(1)[1] == "Sync partly failed (KeyError); reload to see what did sync"

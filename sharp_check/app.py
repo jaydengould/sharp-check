@@ -1,4 +1,6 @@
 """Dashboard. Run: python -m sharp_check.app  (after archive + normalize), then open http://127.0.0.1:8050"""
+import subprocess
+import sys
 from contextlib import closing
 from datetime import datetime
 
@@ -144,6 +146,9 @@ def header(conn):
         html.Div("sharp-check", className="brand"),
         html.Div([html.Span(f"Synced {when(synced)} UTC" if synced else "Never synced", className="sub"), status],
                  className="meta"),
+        html.Span(id="sync-status", className="neg"),
+        html.Button("Sync", id="sync", className="ls-refresh"),
+        dcc.Location(id="url", refresh=True),
         dcc.Dropdown(id="theme", options=[{"label": t.title(), "value": t} for t in THEMES], value="system",
                      clearable=False, searchable=False, persistence=True, persistence_type="local",
                      className="theme-pick"),
@@ -681,6 +686,22 @@ def ls_game(key, n):
     if game is None:
         return html.P("Pick a game.", className="sub")
     return lineshop_body(lineshop.game_rows(game))
+
+
+@app.callback(Output("url", "href"), Output("sync-status", "children"), Input("sync", "n_clicks"),
+              prevent_initial_call=True,
+              running=[(Output("sync", "disabled"), True, False), (Output("sync", "children"), "Syncing…", "Sync")])
+def sync(_):
+    """Run the CLI archive (fetch, rebuild, closes), then reload so every tab reads the new tables."""
+    # ponytail: blocks one request for the whole run; a background callback if that ever hurts
+    r = subprocess.run([sys.executable, "-m", "sharp_check.archive"], capture_output=True, text=True)
+    if r.returncode == 0:
+        return "/", ""
+    # only the archive's own FAILED lines (they never carry headers); a crash shows its exception type alone
+    failed = [" ".join(l.split(" FAILED: ")[0].split()) for l in r.stdout.splitlines() if " FAILED: " in l]
+    crash = (r.stderr.strip().splitlines() or ["unknown error"])[-1].split(":")[0]
+    what = ", ".join(failed[:3]) + (f" +{len(failed) - 3} more" if len(failed) > 3 else "") if failed else crash
+    return no_update, f"Sync partly failed ({what}); reload to see what did sync"
 
 
 app.clientside_callback(  # assets/theme.js
