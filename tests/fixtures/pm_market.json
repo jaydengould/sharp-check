@@ -1,0 +1,71 @@
+[
+  {
+    "id": "<scrubbed>",
+    "question": "Will D'Andre Swift record 25+ receiving yards?",
+    "slug": "astatc-nfl-phi-chi-2026-09-28-recyd-dswi-gte25",
+    "endDate": "2026-09-29T03:30:26Z",
+    "category": "sports",
+    "startDate": "2026-09-25T20:15:12Z",
+    "image": "https://static.polymarket.us/images/teams/football/nfl/chi/jerseys/4.png?v=20260904",
+    "description": "This market will settle to Yes if D'Andre Swift records at least 25 receiving yards in the Philadelphia Eagles vs Chicago Bears professional football game scheduled for Sep 28, 2026. Overtime is included if played. The listed player must participate in the game by taking at least one snap on offense, defense, or special teams, with a snap nullified by penalty counting; otherwise, the market will settle to the last fair market price. The market will settle based on the official box score at the conclusion of the game. For purposes of this market, stat corrections enforced after the game has been completed will not count. If the game is delayed, postponed, or suspended and not rescheduled to a date within two days of the originally scheduled date, the market will settle to the last fair market price. Outcome sourced from the relevant governing body.",
+    "active": true,
+    "marketType": "props",
+    "closed": true,
+    "createdAt": "2026-09-25T20:15:12Z",
+    "updatedAt": "2026-09-30T03:08:31Z",
+    "archived": false,
+    "orderPriceMinTickSize": 0.01,
+    "gameStartTime": "2026-09-29T00:15:00Z",
+    "manualActivation": false,
+    "sportsMarketType": "football_player_receiving_yards",
+    "line": 25,
+    "marketSides": [
+      {
+        "id": "<scrubbed>",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "astatc-nfl-phi-chi-2026-09-28-recyd-dswi-gte25",
+        "createdAt": "2026-09-25T20:15:12Z",
+        "updatedAt": "2026-09-25T20:15:12Z",
+        "description": "Yes",
+        "price": "0",
+        "marketId": "<scrubbed>",
+        "long": true,
+        "tradable": true
+      },
+      {
+        "id": "<scrubbed>",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "astatc-nfl-phi-chi-2026-09-28-recyd-dswi-gte25",
+        "createdAt": "2026-09-25T20:15:12Z",
+        "updatedAt": "2026-09-25T20:15:12Z",
+        "description": "No",
+        "price": "1",
+        "marketId": "<scrubbed>",
+        "long": false,
+        "tradable": true
+      }
+    ],
+    "outcomes": "[\"Yes\",\"No\"]",
+    "outcomePrices": "[\"0\",\"1\"]",
+    "ep3Status": "EXPIRED",
+    "status": "MARKET_STATUS_RESOLVED",
+    "assetPriceTerms": null,
+    "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_PROP",
+    "hidden": false,
+    "tags": [],
+    "title": "D'Andre Swift 25+ receiving yards",
+    "color": "#0B162A",
+    "darkColor": "#C83803",
+    "feeCoefficient": 0.0695,
+    "metadata": {
+      "playerAbbreviation": "dswi",
+      "playerId": "<scrubbed>",
+      "playerName": "D'Andre Swift",
+      "teamId": "<scrubbed>"
+    },
+    "titleShort": "D'Andre Swift 25+ receiving yards",
+    "ep3SyncedAt": "2026-09-29T03:30:26Z",
+    "minimumTradeQty": 0.01,
+    "comboEnabled": true
+  }
+]

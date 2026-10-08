@@ -1,0 +1,12 @@
+.env
+*.db
+data/
+__pycache__/
+.venv/
+.DS_Store
+secrets/
+*.pem
+*.key
+.claude/
+trade_screenshots/
+.superpowers/

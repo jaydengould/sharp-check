@@ -1,0 +1,59 @@
+[
+  {
+    "can_close_early": true,
+    "close_time": "2026-09-27T20:15:33Z",
+    "created_time": "2026-09-23T17:07:20.365615Z",
+    "custom_strike": {
+      "football_player": "5f7253fb-e48e-44ff-9a51-4cd8e1893f68",
+      "football_team": "64f72720-2e4a-4cc8-a39b-ca148aecb389"
+    },
+    "early_close_condition": "This market will close and expire early if the event occurs.",
+    "event_ticker": "KXNFLPASSYDS-26SEP27KCMIA",
+    "exchange_index": 0,
+    "expected_expiration_time": "2026-09-27T20:00:00Z",
+    "expiration_time": "2026-09-29T17:00:00Z",
+    "expiration_value": "passing_yards",
+    "floor_strike": 199.5,
+    "last_price_dollars": "0.9900",
+    "latest_expiration_time": "2026-09-29T17:00:00Z",
+    "liquidity_dollars": "0.0000",
+    "market_type": "binary",
+    "no_ask_dollars": "1.0000",
+    "no_bid_dollars": "0.0000",
+    "no_sub_title": "Patrick Mahomes: 200+",
+    "notional_value_dollars": "1.0000",
+    "occurrence_datetime": "2026-09-27T20:00:00Z",
+    "open_interest_fp": "18588.79",
+    "open_time": "2026-09-23T17:15:00Z",
+    "previous_price_dollars": "0.9900",
+    "previous_yes_ask_dollars": "1.0000",
+    "previous_yes_bid_dollars": "0.0000",
+    "price_level_structure": "linear_cent",
+    "price_ranges": [
+      {
+        "end": "1.0000",
+        "start": "0.0000",
+        "step": "0.0100"
+      }
+    ],
+    "primary_participant_key": "<scrubbed>",
+    "result": "yes",
+    "rules_primary": "If Patrick Mahomes records 200+ passing yards in the Kansas City vs Miami Pro Football game originally scheduled for Sep 27, 2026, then the market resolves to Yes.",
+    "rules_secondary": "The following market refers to Patrick Mahomes in the Kansas City vs Miami Pro Football game originally scheduled for Sep 27, 2026. If Patrick Mahomes is active but never takes a snap, the market settles to the fair market price before game start. Once Patrick Mahomes takes at least one snap, even if nullified by penalty, the market settles based on passing yards recorded.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "settlement_timer_seconds": 60,
+    "settlement_ts": "2026-09-27T20:17:36.459867Z",
+    "settlement_value_dollars": "1.0000",
+    "status": "finalized",
+    "strike_type": "greater",
+    "ticker": "KXNFLPASSYDS-26SEP27KCMIA-KCPMAHOMES15-200",
+    "title": "Patrick Mahomes: 200+ passing yards",
+    "updated_time": "2026-09-27T20:17:36.630789Z",
+    "volume_24h_fp": "0.00",
+    "volume_fp": "20592.39",
+    "yes_ask_dollars": "1.0000",
+    "yes_ask_size_fp": "0.00",
+    "yes_bid_dollars": "0.0000",
+    "yes_bid_size_fp": "0.00",
+    "yes_sub_title": "Patrick Mahomes: 200+"
+  }
+]

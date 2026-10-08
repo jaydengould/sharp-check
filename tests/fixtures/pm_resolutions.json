@@ -1,0 +1,650 @@
+[
+  {
+    "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+    "beforePosition": {
+      "netPosition": "34",
+      "qtyBought": "34",
+      "qtySold": "0",
+      "cost": {
+        "value": "5.0007",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-22T17:46:04.908589492Z",
+      "marketMetadata": {
+        "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "icon": "",
+        "title": "Argentina vs. Austria",
+        "outcome": "Yes",
+        "eventSlug": "fwc-arg-aut-2026-06-22",
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "0",
+        "currency": "USD"
+      },
+      "avgPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "fees": {
+        "value": "0.2113",
+        "currency": "USD"
+      },
+      "baseCost": {
+        "value": "4.7894",
+        "currency": "USD"
+      },
+      "costPerShare": null,
+      "netPositionDecimal": "34.2100",
+      "qtyBoughtDecimal": "34.2100",
+      "qtySoldDecimal": "0.0000",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "afterPosition": {
+      "netPosition": "0",
+      "qtyBought": "34",
+      "qtySold": "34",
+      "cost": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "-4.7894",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-22T19:05:18.816321855Z",
+      "marketMetadata": {
+        "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "icon": "",
+        "title": "Argentina vs. Austria",
+        "outcome": "None",
+        "eventSlug": "fwc-arg-aut-2026-06-22",
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "0",
+        "currency": "USD"
+      },
+      "avgPx": null,
+      "fees": null,
+      "baseCost": null,
+      "costPerShare": null,
+      "netPositionDecimal": "0.0000",
+      "qtyBoughtDecimal": "34.2100",
+      "qtySoldDecimal": "34.2100",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "updateTime": "2026-06-22T19:05:18.816321855Z",
+    "tradeId": "<scrubbed>",
+    "side": "POSITION_RESOLUTION_SIDE_SHORT",
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will the World Cup match Argentina vs Austria scheduled for Jun 22, 2026 end in a draw?",
+      "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+      "endDate": "2026-06-22T19:02:21Z",
+      "category": "sports",
+      "startDate": "2026-06-04T18:35:20Z",
+      "description": "What will be the outcome of the World Cup event between Argentina and Austria, scheduled for 2026-06-22 1:00PM ET? This event has three possible outcomes: Argentina wins, Austria wins, or draw. The result is determined at full time (90 minutes plus stoppage time). If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": true,
+      "marketType": "drawable_outcome",
+      "closed": true,
+      "createdAt": "2026-06-04T18:35:20Z",
+      "updatedAt": "2026-09-21T22:32:07Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-22T17:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "drawable_outcome",
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "atc-fwc-arg-aut-2026-06-22-draw",
+          "createdAt": "2026-06-04T18:35:20Z",
+          "updatedAt": "2026-06-04T18:35:20Z",
+          "description": "Yes",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "atc-fwc-arg-aut-2026-06-22-draw",
+          "createdAt": "2026-06-04T18:35:20Z",
+          "updatedAt": "2026-06-04T18:35:20Z",
+          "description": "No",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"0\",\"1\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_DRAWABLE_OUTCOME",
+      "hidden": false,
+      "tags": [],
+      "feeCoefficient": 0.0695,
+      "sortOrder": 2,
+      "ep3SyncedAt": "2026-09-21T22:32:07Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "comboLegDetails": []
+  },
+  {
+    "marketSlug": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+    "beforePosition": {
+      "netPosition": "11",
+      "qtyBought": "11",
+      "qtySold": "0",
+      "cost": {
+        "value": "4.9918",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-22T18:28:25.065940797Z",
+      "marketMetadata": {
+        "slug": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+        "icon": "",
+        "title": "France vs. Iraq",
+        "outcome": "Yes",
+        "eventSlug": "fwc-fra-irq-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Kylian Mbapp\u00e9",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/fra/jerseys/10.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "10.58",
+        "currency": "USD"
+      },
+      "avgPx": {
+        "value": "0.4600",
+        "currency": "USD"
+      },
+      "fees": {
+        "value": "0.1250",
+        "currency": "USD"
+      },
+      "baseCost": {
+        "value": "4.8668",
+        "currency": "USD"
+      },
+      "costPerShare": null,
+      "netPositionDecimal": "10.5800",
+      "qtyBoughtDecimal": "10.5800",
+      "qtySoldDecimal": "0.0000",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "afterPosition": {
+      "netPosition": "0",
+      "qtyBought": "11",
+      "qtySold": "11",
+      "cost": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "5.7132",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-23T00:50:15.036175722Z",
+      "marketMetadata": {
+        "slug": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+        "icon": "",
+        "title": "France vs. Iraq",
+        "outcome": "None",
+        "eventSlug": "fwc-fra-irq-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Kylian Mbapp\u00e9",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/fra/jerseys/10.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "0",
+        "currency": "USD"
+      },
+      "avgPx": null,
+      "fees": null,
+      "baseCost": null,
+      "costPerShare": null,
+      "netPositionDecimal": "0.0000",
+      "qtyBoughtDecimal": "10.5800",
+      "qtySoldDecimal": "10.5800",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "updateTime": "2026-06-23T00:50:15.036175722Z",
+    "tradeId": "<scrubbed>",
+    "side": "POSITION_RESOLUTION_SIDE_LONG",
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will Kylian Mbappe record at least 2 goals+assists in FRA vs IRQ?",
+      "slug": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+      "endDate": "2026-06-23T00:50:08Z",
+      "category": "sports",
+      "startDate": "2026-06-20T03:36:54Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/fra/jerseys/10.png",
+      "description": "In the upcoming soccer match FRA vs IRQ scheduled for 2026-06-22 5:00PM ET, this market will resolve to \"Yes\" if Kylian Mbappe records a combined 2+ goals and assists in 90 minutes plus stoppage time, based on the official statistics provider. Otherwise, it will resolve to \"No\". Own goals do not count. Goals or assists during extra time or penalty shootouts do not count. If the player does not appear in the match the market will resolve to the fair market price. If the player enters the match and plays any minutes the market settles based on the stat recorded. If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": false,
+      "marketType": "props",
+      "closed": true,
+      "createdAt": "2026-06-20T03:36:54Z",
+      "updatedAt": "2026-09-25T00:16:34Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-22T21:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "soccer_player_goals_plus_assists",
+      "line": 2,
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+          "createdAt": "2026-06-20T03:36:54Z",
+          "updatedAt": "2026-06-20T03:36:54Z",
+          "description": "Yes",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "France",
+            "abbreviation": "fra",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "alias": "",
+            "safeName": "France",
+            "colorPrimary": "#002395",
+            "providerId": "<scrubbed>",
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "displayAbbreviation": "FRA",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "color": {
+              "light": "#002395",
+              "dark": "#002395"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-fra-irq-2026-06-22-ga-fwckylmba-gte2",
+          "createdAt": "2026-06-20T03:36:54Z",
+          "updatedAt": "2026-06-20T03:36:54Z",
+          "description": "No",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "France",
+            "abbreviation": "fra",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "alias": "",
+            "safeName": "France",
+            "colorPrimary": "#002395",
+            "providerId": "<scrubbed>",
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "displayAbbreviation": "FRA",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/FRA.png",
+            "color": {
+              "light": "#002395",
+              "dark": "#002395"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"1\",\"0\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_PROP",
+      "hidden": false,
+      "tags": [],
+      "title": "Kylian Mbapp\u00e9",
+      "color": "#002395",
+      "darkColor": "#002395",
+      "feeCoefficient": 0.0695,
+      "metadata": {
+        "playerAbbreviation": "fwckylmba",
+        "playerId": "<scrubbed>",
+        "playerName": "Kylian Mbapp\u00e9",
+        "teamId": "<scrubbed>"
+      },
+      "titleShort": "Kylian Mbapp\u00e9",
+      "ep3SyncedAt": "2026-09-25T00:16:34Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "comboLegDetails": []
+  },
+  {
+    "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+    "beforePosition": {
+      "netPosition": "19",
+      "qtyBought": "19",
+      "qtySold": "0",
+      "cost": {
+        "value": "9.9979",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-22T17:47:01.764318136Z",
+      "marketMetadata": {
+        "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "Yes",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Erling Haaland",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "19.13",
+        "currency": "USD"
+      },
+      "avgPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "fees": {
+        "value": "0.2416",
+        "currency": "USD"
+      },
+      "baseCost": {
+        "value": "9.7563",
+        "currency": "USD"
+      },
+      "costPerShare": null,
+      "netPositionDecimal": "19.1300",
+      "qtyBoughtDecimal": "19.1300",
+      "qtySoldDecimal": "0.0000",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "afterPosition": {
+      "netPosition": "0",
+      "qtyBought": "19",
+      "qtySold": "19",
+      "cost": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "realized": {
+        "value": "9.3737",
+        "currency": "USD"
+      },
+      "bodPosition": "0",
+      "expired": false,
+      "updateTime": "2026-06-23T01:14:49.984681312Z",
+      "marketMetadata": {
+        "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "None",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Erling Haaland",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "cashValue": {
+        "value": "0",
+        "currency": "USD"
+      },
+      "avgPx": null,
+      "fees": null,
+      "baseCost": null,
+      "costPerShare": null,
+      "netPositionDecimal": "0.0000",
+      "qtyBoughtDecimal": "19.1300",
+      "qtySoldDecimal": "19.1300",
+      "bodPositionDecimal": "0.0000",
+      "comboLegDetails": [],
+      "positionId": "<scrubbed>"
+    },
+    "updateTime": "2026-06-23T01:14:49.984681312Z",
+    "tradeId": "<scrubbed>",
+    "side": "POSITION_RESOLUTION_SIDE_LONG",
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will Erling Haaland record at least 1 goals in NOR vs SEN?",
+      "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+      "endDate": "2026-06-23T01:10:52Z",
+      "category": "sports",
+      "startDate": "2026-06-20T00:35:31Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png",
+      "description": "In the upcoming soccer match NOR vs SEN scheduled for 2026-06-22 8:00PM ET, this market will resolve to \"Yes\" if Erling Haaland scores 1+ goals in 90 minutes plus stoppage time. Otherwise, it will resolve to \"No\". Own goals do not count. Goals scored during extra time or penalty shootouts do not count. If the player does not appear in the match the market will resolve to the fair market price. If the player enters the match and plays any minutes the market settles based on the stat recorded. If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": false,
+      "marketType": "props",
+      "closed": true,
+      "createdAt": "2026-06-20T00:35:31Z",
+      "updatedAt": "2026-09-25T00:16:15Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-23T00:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "soccer_player_goals",
+      "line": 1,
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "createdAt": "2026-06-20T00:35:31Z",
+          "updatedAt": "2026-06-20T00:35:31Z",
+          "description": "Yes",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "createdAt": "2026-06-20T00:35:31Z",
+          "updatedAt": "2026-06-20T00:35:31Z",
+          "description": "No",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"1\",\"0\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_PROP",
+      "hidden": false,
+      "tags": [],
+      "title": "Erling Haaland",
+      "color": "#E82026",
+      "darkColor": "#E82026",
+      "feeCoefficient": 0.0695,
+      "metadata": {
+        "playerAbbreviation": "fwcerlhaa",
+        "playerId": "<scrubbed>",
+        "playerName": "Erling Haaland",
+        "teamId": "<scrubbed>"
+      },
+      "titleShort": "Erling Haaland",
+      "ep3SyncedAt": "2026-09-25T00:16:15Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "comboLegDetails": []
+  }
+]

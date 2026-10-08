@@ -1,0 +1,1161 @@
+[
+  {
+    "id": "<scrubbed>",
+    "aggressorExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "side": "ORDER_SIDE_BUY",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.24",
+          "currency": "USD"
+        },
+        "quantity": 34.21,
+        "cumQuantity": 34.21,
+        "leavesQuantity": 0,
+        "tif": "TIME_IN_FORCE_DAY",
+        "goodTillTime": null,
+        "intent": "ORDER_INTENT_BUY_LONG",
+        "marketMetadata": {
+          "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+          "icon": "",
+          "title": "Argentina vs. Austria",
+          "outcome": "Yes",
+          "eventSlug": "fwc-arg-aut-2026-06-22",
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "0.2100",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.1400",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "4.7894",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:46:04.908589492Z",
+        "createTime": "2026-06-22T17:46:04.907516319Z",
+        "outcomeSide": "OUTCOME_SIDE_YES",
+        "action": "ORDER_ACTION_BUY",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+        "lastTransactTime": "2026-06-22T17:46:04.908589492Z"
+      },
+      "lastShares": "34.2100",
+      "lastPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:46:04.908589492Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": true,
+      "commissionNotionalCollected": {
+        "value": "0.2100",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "passiveExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "side": "ORDER_SIDE_SELL",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.14",
+          "currency": "USD"
+        },
+        "quantity": 9323.94,
+        "cumQuantity": 964.37,
+        "leavesQuantity": 8359.57,
+        "tif": "TIME_IN_FORCE_DAY",
+        "goodTillTime": null,
+        "intent": "ORDER_INTENT_UNDEFINED",
+        "marketMetadata": {
+          "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+          "icon": "",
+          "title": "Argentina vs. Austria",
+          "outcome": "No",
+          "eventSlug": "fwc-arg-aut-2026-06-22",
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_PARTIALLY_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "-1.4400",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.1400",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "0.0000",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:45:28.329344076Z",
+        "createTime": "2026-06-22T17:45:28.263551310Z",
+        "outcomeSide": "OUTCOME_SIDE_UNSPECIFIED",
+        "action": "ORDER_ACTION_UNSPECIFIED",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_UNDEFINED",
+        "lastTransactTime": "2026-06-22T17:46:04.908589492Z"
+      },
+      "lastShares": "34.2100",
+      "lastPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_PARTIAL_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:46:04.908589492Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": false,
+      "commissionNotionalCollected": {
+        "value": "-0.0500",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.8600",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+    "state": "TRADE_STATE_NEW",
+    "createTime": "2026-06-22T17:46:04.908589492Z",
+    "updateTime": "2026-06-22T17:46:04.908589492Z",
+    "price": {
+      "value": "0.1400",
+      "currency": "USD"
+    },
+    "qty": "34",
+    "cost": {
+      "value": "4.9994",
+      "currency": "USD"
+    },
+    "aggressor": {
+      "id": "<scrubbed>",
+      "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+      "side": "ORDER_SIDE_BUY",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.24",
+        "currency": "USD"
+      },
+      "quantity": 34.21,
+      "cumQuantity": 34.21,
+      "leavesQuantity": 0,
+      "tif": "TIME_IN_FORCE_DAY",
+      "goodTillTime": null,
+      "intent": "ORDER_INTENT_BUY_LONG",
+      "marketMetadata": {
+        "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "icon": "",
+        "title": "Argentina vs. Austria",
+        "outcome": "Yes",
+        "eventSlug": "fwc-arg-aut-2026-06-22",
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "0.2100",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "4.7894",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:46:04.908589492Z",
+      "createTime": "2026-06-22T17:46:04.907516319Z",
+      "outcomeSide": "OUTCOME_SIDE_YES",
+      "action": "ORDER_ACTION_BUY",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+      "lastTransactTime": "2026-06-22T17:46:04.908589492Z"
+    },
+    "passive": {
+      "id": "<scrubbed>",
+      "marketSlug": "atc-fwc-arg-aut-2026-06-22-draw",
+      "side": "ORDER_SIDE_SELL",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.14",
+        "currency": "USD"
+      },
+      "quantity": 9323.94,
+      "cumQuantity": 964.37,
+      "leavesQuantity": 8359.57,
+      "tif": "TIME_IN_FORCE_DAY",
+      "goodTillTime": null,
+      "intent": "ORDER_INTENT_UNDEFINED",
+      "marketMetadata": {
+        "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+        "icon": "",
+        "title": "Argentina vs. Austria",
+        "outcome": "No",
+        "eventSlug": "fwc-arg-aut-2026-06-22",
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_PARTIALLY_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "-1.4400",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.1400",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:45:28.329344076Z",
+      "createTime": "2026-06-22T17:45:28.263551310Z",
+      "outcomeSide": "OUTCOME_SIDE_UNSPECIFIED",
+      "action": "ORDER_ACTION_UNSPECIFIED",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_UNDEFINED",
+      "lastTransactTime": "2026-06-22T17:46:04.908589492Z"
+    },
+    "reportingCounterparty": "ORDER_SIDE_UNDEFINED",
+    "createTradeDate": "2026-06-22T00:00:00Z",
+    "updateTradeDate": "2026-06-22T00:00:00Z",
+    "tradeLinkId": "<scrubbed>",
+    "isAggressor": true,
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will the World Cup match Argentina vs Austria scheduled for Jun 22, 2026 end in a draw?",
+      "slug": "atc-fwc-arg-aut-2026-06-22-draw",
+      "endDate": "2026-06-22T19:02:21Z",
+      "category": "sports",
+      "startDate": "2026-06-04T18:35:20Z",
+      "description": "What will be the outcome of the World Cup event between Argentina and Austria, scheduled for 2026-06-22 1:00PM ET? This event has three possible outcomes: Argentina wins, Austria wins, or draw. The result is determined at full time (90 minutes plus stoppage time). If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": true,
+      "marketType": "drawable_outcome",
+      "closed": true,
+      "createdAt": "2026-06-04T18:35:20Z",
+      "updatedAt": "2026-09-21T22:32:07Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-22T17:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "drawable_outcome",
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "atc-fwc-arg-aut-2026-06-22-draw",
+          "createdAt": "2026-06-04T18:35:20Z",
+          "updatedAt": "2026-06-04T18:35:20Z",
+          "description": "Yes",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "atc-fwc-arg-aut-2026-06-22-draw",
+          "createdAt": "2026-06-04T18:35:20Z",
+          "updatedAt": "2026-06-04T18:35:20Z",
+          "description": "No",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"0\",\"1\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_DRAWABLE_OUTCOME",
+      "hidden": false,
+      "tags": [],
+      "feeCoefficient": 0.0695,
+      "sortOrder": 2,
+      "ep3SyncedAt": "2026-09-21T22:32:07Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "qtyDecimal": "34.2100",
+    "comboLegDetails": []
+  },
+  {
+    "id": "<scrubbed>",
+    "aggressorExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+        "side": "ORDER_SIDE_BUY",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.55",
+          "currency": "USD"
+        },
+        "quantity": 21.62,
+        "cumQuantity": 21.62,
+        "leavesQuantity": 0,
+        "tif": "TIME_IN_FORCE_DAY",
+        "goodTillTime": null,
+        "intent": "ORDER_INTENT_BUY_LONG",
+        "marketMetadata": {
+          "slug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+          "icon": "",
+          "title": "Norway vs. Senegal",
+          "outcome": "Yes",
+          "eventSlug": "fwc-nor-sen-2026-06-22",
+          "subject": {
+            "id": "<scrubbed>",
+            "name": "Norway total goals",
+            "subjectType": "",
+            "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png"
+          },
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "0.2700",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.4500",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "9.7290",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:46:35.814108372Z",
+        "createTime": "2026-06-22T17:46:35.812229256Z",
+        "outcomeSide": "OUTCOME_SIDE_YES",
+        "action": "ORDER_ACTION_BUY",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+        "lastTransactTime": "2026-06-22T17:46:35.814108372Z"
+      },
+      "lastShares": "21.6200",
+      "lastPx": {
+        "value": "0.4500",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:46:35.814108372Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": true,
+      "commissionNotionalCollected": {
+        "value": "0.2700",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.4500",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "passiveExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+        "side": "ORDER_SIDE_SELL",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.45",
+          "currency": "USD"
+        },
+        "quantity": 200,
+        "cumQuantity": 64.86,
+        "leavesQuantity": 135.14,
+        "tif": "TIME_IN_FORCE_GOOD_TILL_CANCEL",
+        "goodTillTime": null,
+        "intent": "ORDER_INTENT_UNDEFINED",
+        "marketMetadata": {
+          "slug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+          "icon": "",
+          "title": "Norway vs. Senegal",
+          "outcome": "No",
+          "eventSlug": "fwc-nor-sen-2026-06-22",
+          "subject": {
+            "id": "<scrubbed>",
+            "name": "Norway total goals",
+            "subjectType": "",
+            "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png"
+          },
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_PARTIALLY_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "-0.2100",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.4500",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "0.0000",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:33:22.174145591Z",
+        "createTime": "2026-06-22T17:12:13.933224446Z",
+        "outcomeSide": "OUTCOME_SIDE_UNSPECIFIED",
+        "action": "ORDER_ACTION_UNSPECIFIED",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_UNDEFINED",
+        "lastTransactTime": "2026-06-22T17:46:35.814108372Z"
+      },
+      "lastShares": "21.6200",
+      "lastPx": {
+        "value": "0.4500",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_PARTIAL_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:46:35.814108372Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": false,
+      "commissionNotionalCollected": {
+        "value": "-0.0700",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.5500",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "marketSlug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+    "state": "TRADE_STATE_NEW",
+    "createTime": "2026-06-22T17:46:35.814108372Z",
+    "updateTime": "2026-06-22T17:46:35.814108372Z",
+    "price": {
+      "value": "0.4500",
+      "currency": "USD"
+    },
+    "qty": "22",
+    "cost": {
+      "value": "9.999",
+      "currency": "USD"
+    },
+    "aggressor": {
+      "id": "<scrubbed>",
+      "marketSlug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+      "side": "ORDER_SIDE_BUY",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.55",
+        "currency": "USD"
+      },
+      "quantity": 21.62,
+      "cumQuantity": 21.62,
+      "leavesQuantity": 0,
+      "tif": "TIME_IN_FORCE_DAY",
+      "goodTillTime": null,
+      "intent": "ORDER_INTENT_BUY_LONG",
+      "marketMetadata": {
+        "slug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "Yes",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Norway total goals",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "0.2700",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.4500",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "9.7290",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:46:35.814108372Z",
+      "createTime": "2026-06-22T17:46:35.812229256Z",
+      "outcomeSide": "OUTCOME_SIDE_YES",
+      "action": "ORDER_ACTION_BUY",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+      "lastTransactTime": "2026-06-22T17:46:35.814108372Z"
+    },
+    "passive": {
+      "id": "<scrubbed>",
+      "marketSlug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+      "side": "ORDER_SIDE_SELL",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.45",
+        "currency": "USD"
+      },
+      "quantity": 200,
+      "cumQuantity": 64.86,
+      "leavesQuantity": 135.14,
+      "tif": "TIME_IN_FORCE_GOOD_TILL_CANCEL",
+      "goodTillTime": null,
+      "intent": "ORDER_INTENT_UNDEFINED",
+      "marketMetadata": {
+        "slug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "No",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Norway total goals",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_PARTIALLY_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "-0.2100",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.4500",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:33:22.174145591Z",
+      "createTime": "2026-06-22T17:12:13.933224446Z",
+      "outcomeSide": "OUTCOME_SIDE_UNSPECIFIED",
+      "action": "ORDER_ACTION_UNSPECIFIED",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_UNDEFINED",
+      "lastTransactTime": "2026-06-22T17:46:35.814108372Z"
+    },
+    "reportingCounterparty": "ORDER_SIDE_UNDEFINED",
+    "createTradeDate": "2026-06-22T00:00:00Z",
+    "updateTradeDate": "2026-06-22T00:00:00Z",
+    "tradeLinkId": "<scrubbed>",
+    "isAggressor": true,
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will Norway score more than 1.5 goals in 90 minutes plus stoppage time of NOR vs SEN?",
+      "slug": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+      "endDate": "2026-06-23T01:28:16Z",
+      "category": "sports",
+      "startDate": "2026-06-20T00:29:10Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+      "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG",
+      "description": "This market will resolve to \"Over\" if Norway score more than 1.5 goals in 90 minutes plus stoppage time. Otherwise, it will resolve to \"Under\". If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": false,
+      "marketType": "props",
+      "closed": true,
+      "createdAt": "2026-06-20T00:29:11Z",
+      "updatedAt": "2026-09-25T00:16:20Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-23T00:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "soccer_team_total_goals",
+      "line": 1.5,
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+          "createdAt": "2026-06-20T00:29:11Z",
+          "updatedAt": "2026-06-20T00:29:11Z",
+          "description": "Yes",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "tsc-fwc-nor-sen-2026-06-22-ttg-nor-1pt5",
+          "createdAt": "2026-06-20T00:29:11Z",
+          "updatedAt": "2026-06-20T00:29:11Z",
+          "description": "No",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"No\",\"Yes\"]",
+      "outcomePrices": "[\"1\",\"0\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_PROP",
+      "hidden": false,
+      "tags": [],
+      "title": "Norway total goals",
+      "color": "#E82026",
+      "darkColor": "#E82026",
+      "feeCoefficient": 0.0695,
+      "metadata": {
+        "teamId": "<scrubbed>"
+      },
+      "titleShort": "Norway total goals",
+      "ep3SyncedAt": "2026-09-25T00:16:20Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "qtyDecimal": "21.6200",
+    "comboLegDetails": []
+  },
+  {
+    "id": "<scrubbed>",
+    "aggressorExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "side": "ORDER_SIDE_BUY",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.61",
+          "currency": "USD"
+        },
+        "quantity": 19.13,
+        "cumQuantity": 19.13,
+        "leavesQuantity": 0,
+        "tif": "TIME_IN_FORCE_DAY",
+        "goodTillTime": null,
+        "intent": "ORDER_INTENT_BUY_LONG",
+        "marketMetadata": {
+          "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "icon": "",
+          "title": "Norway vs. Senegal",
+          "outcome": "Yes",
+          "eventSlug": "fwc-nor-sen-2026-06-22",
+          "subject": {
+            "id": "<scrubbed>",
+            "name": "Erling Haaland",
+            "subjectType": "",
+            "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+          },
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "0.2400",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.5100",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "9.7563",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:47:01.764318136Z",
+        "createTime": "2026-06-22T17:47:01.762724296Z",
+        "outcomeSide": "OUTCOME_SIDE_YES",
+        "action": "ORDER_ACTION_BUY",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+        "lastTransactTime": "2026-06-22T17:47:01.764318136Z"
+      },
+      "lastShares": "19.1300",
+      "lastPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:47:01.764318136Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": true,
+      "commissionNotionalCollected": {
+        "value": "0.2400",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "passiveExecution": {
+      "id": "<scrubbed>",
+      "order": {
+        "id": "<scrubbed>",
+        "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "side": "ORDER_SIDE_SELL",
+        "type": "ORDER_TYPE_LIMIT",
+        "price": {
+          "value": "0.51",
+          "currency": "USD"
+        },
+        "quantity": 2000,
+        "cumQuantity": 678.54,
+        "leavesQuantity": 1321.46,
+        "tif": "TIME_IN_FORCE_GOOD_TILL_DATE",
+        "goodTillTime": "2026-06-23T00:00:00Z",
+        "intent": "ORDER_INTENT_BUY_SHORT",
+        "marketMetadata": {
+          "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "icon": "",
+          "title": "Norway vs. Senegal",
+          "outcome": "No",
+          "eventSlug": "fwc-nor-sen-2026-06-22",
+          "subject": {
+            "id": "<scrubbed>",
+            "name": "Erling Haaland",
+            "subjectType": "",
+            "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+          },
+          "eventId": "<scrubbed>"
+        },
+        "state": "ORDER_STATE_PARTIALLY_FILLED",
+        "commissionNotionalTotalCollected": {
+          "value": "-2.1300",
+          "currency": "USD"
+        },
+        "commissionsBasisPoints": "0",
+        "makerCommissionsBasisPoints": "0",
+        "avgPx": {
+          "value": "0.5100",
+          "currency": "USD"
+        },
+        "cashOrderQty": {
+          "value": "0.0000",
+          "currency": "USD"
+        },
+        "insertTime": "2026-06-22T17:38:11.950073120Z",
+        "createTime": "2026-06-22T17:38:11.944322110Z",
+        "outcomeSide": "OUTCOME_SIDE_NO",
+        "action": "ORDER_ACTION_BUY",
+        "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+        "lastTransactTime": "2026-06-22T17:47:01.764318136Z"
+      },
+      "lastShares": "19.1300",
+      "lastPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "type": "EXECUTION_TYPE_PARTIAL_FILL",
+      "text": "",
+      "orderRejectReason": "ORD_REJECT_REASON_EXCHANGE_OPTION",
+      "transactTime": "2026-06-22T17:47:01.764318136Z",
+      "legPrices": [],
+      "tradeId": "<scrubbed>",
+      "aggressor": false,
+      "commissionNotionalCollected": {
+        "value": "-0.0600",
+        "currency": "USD"
+      },
+      "unsolicitedCancelReason": "UNSOLICITED_CXL_REASON_UNDEFINED",
+      "traceId": "<scrubbed>",
+      "commissionSpreadPx": {
+        "value": "0.4900",
+        "currency": "USD"
+      },
+      "transactTradeDate": "2026-06-22T00:00:00Z"
+    },
+    "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+    "state": "TRADE_STATE_NEW",
+    "createTime": "2026-06-22T17:47:01.764318136Z",
+    "updateTime": "2026-06-22T17:47:01.764318136Z",
+    "price": {
+      "value": "0.5100",
+      "currency": "USD"
+    },
+    "qty": "19",
+    "cost": {
+      "value": "9.9963",
+      "currency": "USD"
+    },
+    "aggressor": {
+      "id": "<scrubbed>",
+      "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+      "side": "ORDER_SIDE_BUY",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.61",
+        "currency": "USD"
+      },
+      "quantity": 19.13,
+      "cumQuantity": 19.13,
+      "leavesQuantity": 0,
+      "tif": "TIME_IN_FORCE_DAY",
+      "goodTillTime": null,
+      "intent": "ORDER_INTENT_BUY_LONG",
+      "marketMetadata": {
+        "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "Yes",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Erling Haaland",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "0.2400",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "9.7563",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:47:01.764318136Z",
+      "createTime": "2026-06-22T17:47:01.762724296Z",
+      "outcomeSide": "OUTCOME_SIDE_YES",
+      "action": "ORDER_ACTION_BUY",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+      "lastTransactTime": "2026-06-22T17:47:01.764318136Z"
+    },
+    "passive": {
+      "id": "<scrubbed>",
+      "marketSlug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+      "side": "ORDER_SIDE_SELL",
+      "type": "ORDER_TYPE_LIMIT",
+      "price": {
+        "value": "0.51",
+        "currency": "USD"
+      },
+      "quantity": 2000,
+      "cumQuantity": 678.54,
+      "leavesQuantity": 1321.46,
+      "tif": "TIME_IN_FORCE_GOOD_TILL_DATE",
+      "goodTillTime": "2026-06-23T00:00:00Z",
+      "intent": "ORDER_INTENT_BUY_SHORT",
+      "marketMetadata": {
+        "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+        "icon": "",
+        "title": "Norway vs. Senegal",
+        "outcome": "No",
+        "eventSlug": "fwc-nor-sen-2026-06-22",
+        "subject": {
+          "id": "<scrubbed>",
+          "name": "Erling Haaland",
+          "subjectType": "",
+          "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png"
+        },
+        "eventId": "<scrubbed>"
+      },
+      "state": "ORDER_STATE_PARTIALLY_FILLED",
+      "commissionNotionalTotalCollected": {
+        "value": "-2.1300",
+        "currency": "USD"
+      },
+      "commissionsBasisPoints": "0",
+      "makerCommissionsBasisPoints": "0",
+      "avgPx": {
+        "value": "0.5100",
+        "currency": "USD"
+      },
+      "cashOrderQty": {
+        "value": "0.0000",
+        "currency": "USD"
+      },
+      "insertTime": "2026-06-22T17:38:11.950073120Z",
+      "createTime": "2026-06-22T17:38:11.944322110Z",
+      "outcomeSide": "OUTCOME_SIDE_NO",
+      "action": "ORDER_ACTION_BUY",
+      "manualOrderIndicator": "MANUAL_ORDER_INDICATOR_MANUAL",
+      "lastTransactTime": "2026-06-22T17:47:01.764318136Z"
+    },
+    "reportingCounterparty": "ORDER_SIDE_UNDEFINED",
+    "createTradeDate": "2026-06-22T00:00:00Z",
+    "updateTradeDate": "2026-06-22T00:00:00Z",
+    "tradeLinkId": "<scrubbed>",
+    "isAggressor": true,
+    "market": {
+      "id": "<scrubbed>",
+      "question": "Will Erling Haaland record at least 1 goals in NOR vs SEN?",
+      "slug": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+      "endDate": "2026-06-23T01:10:52Z",
+      "category": "sports",
+      "startDate": "2026-06-20T00:35:31Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/teams/soccer/fifawc/nor/jerseys/9.png",
+      "description": "In the upcoming soccer match NOR vs SEN scheduled for 2026-06-22 8:00PM ET, this market will resolve to \"Yes\" if Erling Haaland scores 1+ goals in 90 minutes plus stoppage time. Otherwise, it will resolve to \"No\". Own goals do not count. Goals scored during extra time or penalty shootouts do not count. If the player does not appear in the match the market will resolve to the fair market price. If the player enters the match and plays any minutes the market settles based on the stat recorded. If the event is postponed, delayed, or rescheduled, the settlement date will be amended to the rescheduled date. If the rescheduled date is not within two weeks of the originally scheduled date, the instrument will settle at last-traded prices. If the event is rescheduled to an earlier date than originally scheduled, the settlement date will be the rescheduled date. If the event is canceled, the instrument will settle at last-traded prices. If the event concludes early, is shortened, or is truncated, the outcome shall be the declared official result. If a participant retires after the event has commenced, the outcome shall be the declared official result. In the case of a withdrawal, walkover, forfeit, no-contest, or the removal of a participant before the event commences, the instrument will settle at last-traded prices.",
+      "active": false,
+      "marketType": "props",
+      "closed": true,
+      "createdAt": "2026-06-20T00:35:31Z",
+      "updatedAt": "2026-09-25T00:16:15Z",
+      "archived": false,
+      "orderPriceMinTickSize": 0.01,
+      "gameStartTime": "2026-06-23T00:00:00Z",
+      "manualActivation": false,
+      "sportsMarketType": "soccer_player_goals",
+      "line": 1,
+      "marketSides": [
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "createdAt": "2026-06-20T00:35:31Z",
+          "updatedAt": "2026-06-20T00:35:31Z",
+          "description": "Yes",
+          "price": "1",
+          "marketId": "<scrubbed>",
+          "long": true,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        },
+        {
+          "id": "<scrubbed>",
+          "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+          "identifier": "astatc-fwc-nor-sen-2026-06-22-g-fwcerlhaa-gte1",
+          "createdAt": "2026-06-20T00:35:31Z",
+          "updatedAt": "2026-06-20T00:35:31Z",
+          "description": "No",
+          "price": "0",
+          "marketId": "<scrubbed>",
+          "long": false,
+          "teamId": "<scrubbed>",
+          "team": {
+            "id": "<scrubbed>",
+            "name": "Norway",
+            "abbreviation": "nor",
+            "league": "fwc",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "alias": "",
+            "safeName": "Norway",
+            "colorPrimary": "#E82026",
+            "providerId": "<scrubbed>",
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "displayAbbreviation": "NOR",
+            "providerIds": [
+              {
+                "provider": "PROVIDER_OPTICODDS",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "<scrubbed>"
+              },
+              {
+                "provider": "PROVIDER_SPORTRADAR",
+                "providerId": "<scrubbed>"
+              }
+            ],
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-countries/NOR.png",
+            "color": {
+              "light": "#E82026",
+              "dark": "#E82026"
+            },
+            "imageDisplayType": "IMAGE_DISPLAY_TYPE_FLAG"
+          },
+          "tradable": true
+        }
+      ],
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"1\",\"0\"]",
+      "ep3Status": "EXPIRED",
+      "status": "MARKET_STATUS_RESOLVED",
+      "assetPriceTerms": null,
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_PROP",
+      "hidden": false,
+      "tags": [],
+      "title": "Erling Haaland",
+      "color": "#E82026",
+      "darkColor": "#E82026",
+      "feeCoefficient": 0.0695,
+      "metadata": {
+        "playerAbbreviation": "fwcerlhaa",
+        "playerId": "<scrubbed>",
+        "playerName": "Erling Haaland",
+        "teamId": "<scrubbed>"
+      },
+      "titleShort": "Erling Haaland",
+      "ep3SyncedAt": "2026-09-25T00:16:15Z",
+      "minimumTradeQty": 0.01,
+      "comboEnabled": true
+    },
+    "qtyDecimal": "19.1300",
+    "comboLegDetails": []
+  }
+]
