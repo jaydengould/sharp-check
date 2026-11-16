@@ -10,3 +10,4 @@ secrets/
 .claude/
 trade_screenshots/
 .superpowers/
+dist/
