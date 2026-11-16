@@ -16,6 +16,7 @@ Personal, read-only dashboard: ingests my sports bets from Kalshi and Polymarket
 
 - Setup: `python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`. All commands assume the venv is active. Tests: `python -m pytest tests/` (no network).
 - Archive account data and closing prices: `python -m sharp_check.archive` (also rebuilds normalized tables). Rebuild normalized tables: `python -m sharp_check.normalize`. Cash check: `python -m sharp_check.reconcile` (prints only differences). Dashboard: `python -m sharp_check.app` (http://127.0.0.1:8050). Read-only API check: `python scripts/smoke.py` (also rewrites `tests/fixtures/`).
+- Dock app: `python scripts/make_app.py` (needs `swiftc`), then drag `dist/Sharp Check.app` to the Dock. A native window (Swift + WKWebView) on port 8766; closing it stops the dashboard. Rebuild after moving the repo or recreating `.venv` (paths are baked in). First launch asks for Documents access; a launch that hangs on "Starting…" is usually that prompt.
 
 ## Doc conventions (apply to this file and everything in `docs/`)
 
