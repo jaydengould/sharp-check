@@ -1,14 +1,15 @@
 # sharp-check
 
-A personal, read-only dashboard for sports betting on prediction markets. It pulls my bet history from Kalshi and Polymarket US and answers one question: am I actually beating the market, or just getting lucky?
+A personal, read-only dashboard for sports betting on prediction markets. It pulls my bet history from Kalshi, Polymarket US and Novig and answers one question: am I actually beating the market, or just getting lucky?
 
 Python, SQLite and Plotly Dash. It only reads (account data and public market prices) and never places or changes orders.
 
 ## Status
 
-Phases 1–4 and 6–8 are done, plus CLV for parlays. Phase 5 (sharp CLV) waits until paying for odds data is worth it.
+Phases 1–4 and 6–9 are done, plus CLV for parlays. Phase 5 (sharp CLV) waits until paying for odds data is worth it.
 
 - Every bet is rebuilt from the raw account history, and its P&L matches what each venue's app shows. Cash rebuilt from the bets matches each venue's reported balance to the cent.
+- Novig is the third venue. Its API sees straight bets paid in cash in full, but not bets placed with trade credits or parlays (Novig confirmed no key can read those). So Novig counts fully in own-money P&L, the bankroll and the cash check, and per-bet stats cover its cash straights. It has no CLV, spread or line-shop data, because Novig publishes no quote history.
 - Every bet is linked to its game's start time (or flagged as a future), so it's known to be live or pregame.
 - Actual vs. expected wins counts cash-outs by how their market finished (would the bet have won if held), so cashing out winners early doesn't skew it.
 - Pregame single bets get closing line value (CLV) against each venue's own price at game start. There are three views: before fees, after fees (the "was this bet +EV" check), and how far the price moved before kickoff.
@@ -22,7 +23,7 @@ Phases 1–4 and 6–8 are done, plus CLV for parlays. Phase 5 (sharp CLV) waits
 
 Seven tabs:
 
-- **Overview**: headline P&L, ROI, total staked, CLV after fees for singles and parlays, and wins vs. expected, then the bankroll curve (Week / Month / 3 months / Year / All) above open positions and recent bets. A Both / Kalshi / Polymarket switch filters the whole page.
+- **Overview**: betting P&L, own-money P&L, ROI, total staked, CLV after fees for singles and parlays, and wins vs. expected, then the bankroll curve (Week / Month / 3 months / Year / All) above open positions and recent bets. An All / Kalshi / Polymarket / Novig switch filters the whole page.
 - **CLV**: summaries by venue and every scored bet, filterable by venue.
 - **Performance**: P&L by venue and bet type, own-money P&L, and segments.
 - **Bets**: every bet, with venue and type filters and a search box.
@@ -44,8 +45,9 @@ Bets show readable names ("Kyle Monangai 1+ touchdowns", "Detroit Lions −4.5",
 8. **Execution cost**, in two parts:
    - **8a. Spread**: the spread paid when entering and when cashing out. *Done.*
    - **8b. Line shopping**: a live checker for where to place a bet, and the other venue's price at the moment of each past bet. *Done.*
+9. **Novig**: a third venue, read-only. Its cash, own-money P&L and bankroll cover all activity; per-bet stats cover cash-funded straights. *Done.*
 
-Also done: **parlay CLV** for cross-game parlays and **cash-out analysis**. Possible later: more prop types and leagues in the line-shop checker, and a third venue (Novig).
+Also done: **parlay CLV** for cross-game parlays and **cash-out analysis**. Possible later: more prop types and leagues in the line-shop checker, and Novig in the line shop.
 
 ## Setup
 
