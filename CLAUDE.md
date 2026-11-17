@@ -1,11 +1,12 @@
 # sharp-check
 
-Personal, read-only dashboard: ingests my sports bets from Kalshi and Polymarket US, computes P&L, segment performance, and CLV. Python + SQLite + Plotly Dash.
+Personal, read-only dashboard: ingests my sports bets from Kalshi, Polymarket US and Novig, computes P&L, segment performance, and CLV. Python + SQLite + Plotly Dash.
 
 ## Hard rules
 
-- Read-only. Never call order create/cancel/modify endpoints on either venue.
+- Read-only. Never call order create/cancel/modify endpoints on any venue.
 - Polymarket US only (`api.polymarket.us`, `gateway.polymarket.us`). Never use global Polymarket Gamma/CLOB/Data API docs or code.
+- Novig: the `management::read` key only. Never call order, transfer or key endpoints, and never load the management key.
 - Never print, log, or commit secrets. Credentials live in `.env` and `secrets/` (both gitignored).
 - The repo is public. Test fixtures from real API responses must have account IDs and balances scrubbed. Keep personal dollar figures (P&L, stakes, bankroll, rewards) out of docs and commits; state findings in cents, counts and CIs.
 - `raw_pages` is the append-only source of truth; every other table must be rebuildable from it. Only exception: `data/manual_cash.csv` (hand-entered cash the APIs don't expose, e.g. Kalshi rewards).
@@ -42,6 +43,7 @@ Read a file only when the task touches its topic.
 - `docs/roadmap.md`: phases, current phase, decisions and open questions. Read when starting a session or a new phase.
 - `docs/kalshi.md`: auth signing, endpoints, historical cutoff, fill normalization, game start times (milestones), line-shop listings, depth, fees and NFL prop series. Read when touching the Kalshi client, game linkage or line shop.
 - `docs/polymarket-us.md`: auth signing, activities, events, market lookup, price history, known gaps, line-shop event filters, top of book and gateway throttling. Read when touching the Polymarket client, game linkage or line shop.
+- `docs/novig.md`: auth signing, location check, what the API can't see (credit bets, parlays), 1¢ contracts, ledger `ref` matching, market types. Read when touching the Novig client or its normalization.
 - `docs/data-model.md`: tables and keys. Read when changing schema or ingestion.
 - `docs/pnl-rules.md`: stake, P&L, ROI, live/pregame, void, CLV (singles and parlays), habit-metric, spread and line-shop rules. Read when changing bet derivation or metrics.
 - `docs/superpowers/`: per-phase design specs and implementation plans. Read when revisiting how a finished phase was designed.

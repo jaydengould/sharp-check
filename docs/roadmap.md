@@ -2,7 +2,7 @@
 
 Build one phase at a time. A phase is done when its exit check passes; update **Current phase** then.
 
-**Current phase: none in progress; 8b done 2026-10-05** (phases 1–4, 6, 7, 8a and 8b plus parlay CLV completed 2026-09-30 to 2026-10-05; phase 5 deferred 2026-10-03; phase 8 split 2026-10-05, see Decisions)
+**Current phase: 9 (Novig), built 2026-11-17 on the local `novig` branch; exit check pending the user's dashboard review.** 8b done 2026-10-05 (phases 1–4, 6, 7, 8a and 8b plus parlay CLV completed 2026-09-30 to 2026-10-05; phase 5 deferred 2026-10-03; phase 8 split 2026-10-05, see Decisions)
 
 | # | Phase | Exit check |
 |---|-------|-----------|
@@ -14,6 +14,7 @@ Build one phase at a time. A phase is done when its exit check passes; update **
 | 6 | Habit metrics: stake after loss vs win, time placed before start, stake % of bankroll, bankroll curve, maker vs taker (fees and spread paid) | Views render on real data |
 | 7 | Dashboard design and layout: visual style, navigation between sections (tabs or a sidebar), headline numbers up top, readable tables and charts, light/dark, phone width | Headline P&L and CLV readable at a glance without scrolling; every section reachable in one click; no horizontal scroll at phone width |
 | 8a | Spread at entry and exit (cash-outs): fill price vs the mid in the minute before each fill | Spread at entry and exit shown per bet and summed per venue, with priced fills x of y; every unpriced fill listed with a reason |
+| 9 | Novig as a third venue: money level (own money, bankroll, reconcile) for all activity, per-bet for cash straights | Venue switch All/Kalshi/Polymarket/Novig; Novig reconciles (fills, bets, ledger); own-money tile on every scope |
 | 8b | Cross-venue line shopping: live checker (Line shop tab) plus a backward-looking table of past singles, on one Sportradar-ID matcher | Line shop shows matched outcomes with all-in prices (ask + fee) for a live NFL game on both venues; Habits shows past singles on registry markets vs the other venue's all-in at the fill, with priced x of y; every unmatched single listed with a reason |
 
 Sync is on demand (CLI or Dash button). No scheduler or always-on host in v1.
@@ -58,6 +59,8 @@ Read-only. Prints field names and counts, never values or balances.
 - Save one scrubbed fixture per endpoint under `tests/fixtures/`.
 
 ## Decisions
+
+- Phase 9 Novig (decided 2026-11-17, spec and plan in `docs/superpowers/`): read-only `management::read` key. Credit-funded bets and parlays aren't readable by any v3 key (Novig dev relations), so they count at their cash only (`untracked_bet`). Statements rejected (manual). CLV and a 3-way line shop deferred (no quote history; no Sportradar IDs, so a new matcher).
 
 - Phase 8b redefined (decided 2026-10-05): a live line-shop checker (runs in the local app on demand, no host, stores nothing) plus the backward-looking table. Past-only would rest on ~22 pregame singles; the checker saves on every future single. Parlays out of scope. Spec: `docs/superpowers/specs/2026-10-05-phase8b-line-shop-design.md`.
 - Phase 8 split (decided 2026-10-05): 8a spread at entry and exit (reuses the quote machinery, covers every bet), 8b line shopping later (needs cross-venue game matching, which overlaps phase 5). Parlay exits included in 8a (8 of 10 parlay cash-outs are cross-game; they hold most of the cash-out hindsight value).
