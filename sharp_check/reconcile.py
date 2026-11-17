@@ -48,21 +48,31 @@ def bets_cash(conn, venue):
 
 def reported_cash(conn, venue):
     """Cash from the latest archived balance snapshot."""
-    endpoint = {"kalshi": "/portfolio/balance", "polymarket": "/v1/account/balances"}[venue]
+    endpoint = {"kalshi": "/portfolio/balance", "polymarket": "/v1/account/balances", "novig": "/v3/account/balance"}[venue]
     row = conn.execute("SELECT body_json FROM raw_pages WHERE venue = ? AND endpoint = ? ORDER BY id DESC LIMIT 1",
                        (venue, endpoint)).fetchone()
     body = json.loads(row[0])
     if venue == "kalshi":
         return micros(body["balance_dollars"])
+    if venue == "novig":
+        return micros(body["balance"])
     return micros(Decimal(str(body["balances"][0]["currentBalance"])))  # float in the API
+
+
+def novig_ledger_gap(conn):
+    """Novig ledger total - reported balance (micros). Nonzero = a missing ledger page: the ledger is all the cash."""
+    rows = {t["transactionId"]: t for t in archive.records(conn, "novig", ("/v3/account/transactions",), "items")}
+    return sum(micros(t["amount"]) for t in rows.values()) - reported_cash(conn, "novig")
 
 
 if __name__ == "__main__":
     conn = archive.connect()
-    for venue in ("kalshi", "polymarket"):
+    for venue in ("kalshi", "polymarket", "novig"):
         cash, open_markets = computed_cash(conn, venue)
         reported = reported_cash(conn, venue)
         for label, computed in (("fills", cash), ("bets", bets_cash(conn, venue))):
             diff = computed - reported
             verdict = "OK" if abs(diff) <= TOLERANCE else "MISMATCH"
             print(f"{venue:10} {verdict:8} {label:5} - reported = {diff / ONE:+.2f} USD; open positions: {len(open_markets)}")
+    gap = novig_ledger_gap(conn)
+    print(f"{'novig':10} {'OK' if abs(gap) <= TOLERANCE else 'MISMATCH':8} ledger - reported = {gap / ONE:+.2f} USD")

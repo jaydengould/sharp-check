@@ -7,7 +7,7 @@ from sharp_check import archive
 from sharp_check.normalize import ONE
 from sharp_check.reconcile import reported_cash
 
-VENUES = ("kalshi", "polymarket")
+VENUES = ("kalshi", "polymarket", "novig")
 SPLITS = {"all": (0, 1), "singles": (0,), "parlays": (1,)}
 SEGMENTS = {"is_live": "Live vs pregame", "sport": "Sport", "market_type": "Market type"}
 
@@ -198,8 +198,9 @@ def linkage(conn):
 
 
 def locked_bonus(conn, venue):
-    """Polymarket `displayedBonus`, provisional (docs/polymarket-us.md). Kalshi exposes none."""
-    if venue == "kalshi":
+    """Polymarket `displayedBonus`, provisional (docs/polymarket-us.md). Kalshi exposes none; Novig trade credits live
+    in their own wallets, outside the reported balance."""
+    if venue in ("kalshi", "novig"):
         return 0
     row = conn.execute("SELECT body_json FROM raw_pages WHERE venue = 'polymarket' AND endpoint = '/v1/account/balances'"
                        " ORDER BY id DESC LIMIT 1").fetchone()

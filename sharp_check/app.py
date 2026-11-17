@@ -12,7 +12,7 @@ from sharp_check.normalize import ONE
 
 SCOPES = {"Both": metrics.VENUES, "Kalshi": ("kalshi",), "Polymarket": ("polymarket",)}
 THEMES = ("system", "light", "dark", "blue", "bears", "giants")
-VENUE = {"kalshi": "Kalshi", "polymarket": "PM"}
+VENUE = {"kalshi": "Kalshi", "polymarket": "PM", "novig": "Novig"}
 
 
 def usd(micros):

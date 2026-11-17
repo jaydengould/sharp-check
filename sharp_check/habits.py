@@ -4,7 +4,7 @@ import statistics
 
 from sharp_check import archive, match, metrics, reconcile
 from sharp_check.metrics import VENUES
-from sharp_check.normalize import ONE, iso_us
+from sharp_check.normalize import ONE, iso_us, micros
 
 BUCKETS = ((15 * 60, "< 15 min"), (3600, "15 min–1 h"), (6 * 3600, "1–6 h"), (24 * 3600, "6–24 h"), (None, "> 24 h"))
 TAGS = ("after_win", "after_loss", "after_push", "first")
@@ -15,8 +15,9 @@ def bankroll_series(conn, venues=VENUES):
     position cost, so only ledger cash and closed bets' realized P&L move it. Events sharing a timestamp (a deposit
     and its fee) are netted, so the curve never shows a fee before its deposit."""
     marks = ",".join("?" * len(venues))
-    ev = [(iso_us(ts), a, 0) for ts, a in conn.execute(f"SELECT ts, amount FROM cash_ledger WHERE venue IN ({marks})",
-                                                          venues)]
+    # untracked_bet = Novig bets the API can't itemize, at their cash: bet results, so they move P&L too.
+    ev = [(iso_us(ts), a, a if kind == "untracked_bet" else 0) for ts, a, kind in conn.execute(
+        f"SELECT ts, amount, kind FROM cash_ledger WHERE venue IN ({marks})", venues)]
     ev += [(c, p, p) for c, p in conn.execute(f"SELECT closed_ts, realized_pnl FROM bets WHERE closed_ts IS NOT NULL"
                                               f" AND venue IN ({marks})", venues)]
     out, bank, pnl = [], 0, 0
@@ -108,7 +109,16 @@ def timing(rows, min_n=30):
 # Hypothetical maker fee coefficient on qty x p(1-p) (checked 2026-10-03; no API reports it for past fills).
 # Polymarket US: maker rebate 0.0125 (docs.polymarket.us/fees.md, effective 2026-10-01).
 # Kalshi: 0.0175 on `quadratic_with_maker_fees` series, 0 on `quadratic`. Assumed everywhere: savings understated.
-MAKER_THETA = {"kalshi": 0.0175, "polymarket": -0.0125}
+MAKER_THETA = {"kalshi": 0.0175, "polymarket": -0.0125, "novig": 0}  # a Novig maker never pays
+
+
+def untracked_fees(conn):
+    """Fees on Novig bets the API can't itemize (credit-funded bets, parlays): ledger FEE rows booked as
+    untracked_bet. Micros, positive."""
+    untracked = {t for t, in conn.execute("SELECT txn_id FROM cash_ledger WHERE venue = 'novig' AND kind = 'untracked_bet'")}
+    fees = {t["transactionId"]: t for t in archive.records(conn, "novig", ("/v3/account/transactions",), "items")
+            if t["kind"] == "FEE" and t["transactionId"] in untracked}
+    return -sum(micros(t["amount"]) for t in fees.values())
 
 
 def fees(conn):

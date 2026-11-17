@@ -122,7 +122,7 @@ def test_bankroll_check_nets_partial_exits_of_open_bets(monkeypatch):
     ledger(conn, "2026-01-01T00:00:00.000000Z", 100 * ONE)
     bet(conn, "p", "2026-01-02T00:00:00Z", 4 * ONE)  # bought 10 at 0.40, sold 5 at 0.50, still open
     conn.execute("UPDATE bets SET exit_proceeds = 2500000, exit_fees = 10000 WHERE bet_id = 'p'")
-    cash = {"kalshi": 100 * ONE - 4 * ONE + 2_500_000 - 10_000, "polymarket": 0}
+    cash = {"kalshi": 100 * ONE - 4 * ONE + 2_500_000 - 10_000, "polymarket": 0, "novig": 0}
     monkeypatch.setattr(habits.reconcile, "reported_cash", lambda c, v: cash[v])
     assert habits.bankroll_check(conn) == 0
 
