@@ -81,3 +81,30 @@ def pm_market(slug, sports_market_type, start):
     if slug.split("-")[1] == "f" or start is None:
         return league, sport, "future"
     return league, sport, pm_type(sports_market_type)
+
+
+# Novig `marketType` (GET /v3/types/markets). `*_PROTECTED` variants classify like their base type.
+NOVIG_TYPES = {
+    **dict.fromkeys(("MONEY", "1X2", "MONEYLINE_3_WAY_WIN", "MONEYLINE_3_WAY_DRAW", "TO_ADVANCE"), "moneyline"),
+    "SPREAD": "spread", "TOTAL": "total",
+    **dict.fromkeys(("WINNER", "TOP_FIVE_FINISH", "TOP_TEN_FINISH", "TOP_TWENTY_FINISH", "TO_MAKE_THE_CUT",
+                     "END_OF_ROUND_1_LEADER", "END_OF_ROUND_2_LEADER", "END_OF_ROUND_3_LEADER"), "future"),
+    **dict.fromkeys((
+        "ASSISTS", "SHOTS_ON_TARGET", "GOALS_ASSISTS", "RECEIVING_YARDS", "PLAYER_GOALS", "RECEPTIONS", "RUSHING_YARDS",
+        "SHOTS_ON_GOAL", "FIRST_GOAL_SCORER", "POINTS", "SAVES", "PASSING_YARDS", "POWER_PLAY_POINTS", "TOUCHDOWNS",
+        "REBOUNDS", "REBOUNDS_ASSISTS", "POINTS_REBOUNDS", "POINTS_ASSISTS", "POINTS_REBOUNDS_ASSISTS",
+        "PASSING_TOUCHDOWNS", "PASSING_AND_RUSHING_YARDS", "KICKING_POINTS", "INTERCEPTIONS_THROWN", "TACKLES_ASSISTS",
+        "FIELD_GOALS_MADE", "RUSHING_ATTEMPTS", "PASSING_COMPLETIONS", "PASSING_ATTEMPTS", "LONGEST_RECEPTION",
+        "LONGEST_RUSH", "LONGEST_COMPLETION", "RUSHING_AND_RECEIVING_YARDS", "ANYTIME_TOUCHDOWN_SCORER",
+        "FIRST_TOUCHDOWN_SCORER"), "prop"),
+}
+# Decided `other`, like PM_OTHER: team totals, period lines, custom markets. normalize reports any other `other` type.
+NOVIG_OTHER = ("TEAM_TOTAL", "_1H", "CUSTOM")
+
+
+def novig_type(market_type):
+    return NOVIG_TYPES.get(market_type.removesuffix("_PROTECTED"), "other")
+
+
+def novig_expected_other(market_type):
+    return any(k in market_type for k in NOVIG_OTHER)

@@ -62,3 +62,17 @@ def test_pm_expected_other_covers_decided_types_only():
         assert classify.pm_expected_other(smt), smt
     for smt in ("soccer_game_corners", "baseball_team_full_game_total", None):
         assert not classify.pm_expected_other(smt), smt
+
+
+def test_novig_market_types():
+    assert classify.novig_type("SPREAD") == "spread"
+    assert classify.novig_type("MONEY") == "moneyline"
+    assert classify.novig_type("MONEYLINE_3_WAY_DRAW") == "moneyline"
+    assert classify.novig_type("TOTAL") == "total"
+    assert classify.novig_type("RECEPTIONS_PROTECTED") == "prop"
+    assert classify.novig_type("ANYTIME_TOUCHDOWN_SCORER") == "prop"
+    assert classify.novig_type("TOP_TEN_FINISH") == "future"
+    assert classify.novig_type("TEAM_TOTAL") == "other"
+    assert classify.novig_type("SPREAD_1H") == "other"
+    assert classify.novig_type("SOMETHING_NEW") == "other"
+    assert not classify.novig_expected_other("SOMETHING_NEW") and classify.novig_expected_other("TEAM_TOTAL")
