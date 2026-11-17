@@ -10,7 +10,8 @@ import plotly.graph_objects as go
 from sharp_check import archive, habits, lineshop, metrics, normalize, reconcile
 from sharp_check.normalize import ONE
 
-SCOPES = {"Both": metrics.VENUES, "Kalshi": ("kalshi",), "Polymarket": ("polymarket",)}
+SCOPES = {"All": metrics.VENUES, "Kalshi": ("kalshi",), "Polymarket": ("polymarket",), "Novig": ("novig",)}
+CLV_SCOPES = {k: v for k, v in SCOPES.items() if k != "Novig"}  # Novig has no quote history: no CLV
 THEMES = ("system", "light", "dark", "blue", "bears", "giants")
 VENUE = {"kalshi": "Kalshi", "polymarket": "PM", "novig": "Novig"}
 
@@ -107,17 +108,30 @@ def clv_tile(key, c, n_key):
     return tile(key, f"{c['net_cents']:+.1f}¢", f"after fees · {ci}n {c[n_key]}", c["net_cents"])
 
 
+def own_money_tile(conn, venues):
+    try:
+        own = sum(metrics.own_money(conn, v) for v in venues)
+    except TypeError:  # no balance snapshot yet
+        return tile("Own-money P&L", "–", "needs a balance snapshot")
+    return tile("Own-money P&L", usd(own), "account value − net deposits", own)
+
+
 def tiles(conn, venues):
     h = metrics.headline(conn, venues)
     lo, hi = h["ci"]
     roi = "–" if h["roi"] is None else f"{h['roi']:+.1%}"
+    novig = tuple(venues) == ("novig",)
+    clv_tiles = [tile(k, "–", "not available on Novig") for k in ("CLV · singles", "CLV · parlays")] if novig else [
+        clv_tile("CLV · singles", metrics.clv(conn, venues), "with_close"),
+        clv_tile("CLV · parlays", metrics.parlay_clv(conn, venues), "with_clv")]
     return [
-        tile("Betting P&L", usd(h["pnl"]), f"ROI {roi} · {h['bets']} closed bets", h["pnl"]),
+        tile("Betting P&L", usd(h["pnl"]),
+             f"ROI {roi} · {h['bets']} closed bets" + (" · cash bets only" if novig else ""), h["pnl"]),
+        own_money_tile(conn, venues),
         tile("ROI", roi, "P&L ÷ closed stake", h["roi"], "roi"),
         tile("Total staked", usd(h["stake"]),
              f"closed bets · + {usd(sum(b['cost'] for b in metrics.open_bets(conn, venues)))} open at cost"),
-        clv_tile("CLV · singles", metrics.clv(conn, venues), "with_close"),
-        clv_tile("CLV · parlays", metrics.parlay_clv(conn, venues), "with_clv"),
+        *clv_tiles,
         tile("Wins vs expected", f"{h['wins']} / {h['expected']:.1f}",
              f"CI {max(lo, 0):.1f}–{hi:.1f} · {h['settled']} judged"),
     ]
@@ -163,7 +177,7 @@ def bankroll_figure(series):
     """Unthemed figure dict: shape and hover only. The browser adds theme colours (assets/theme.js)."""
     fig = go.Figure()
     x = [ts[:19] for ts, _, _ in series]
-    for name, ys in (("Bankroll", [b for _, b, _ in series]), ("Cumulative betting P&L", [p for _, _, p in series])):
+    for name, ys in (("Bankroll", [b for _, b, _ in series]), ("Cumulative P&L", [p for _, _, p in series])):
         fig.add_trace(go.Scatter(x=x, y=[y / ONE for y in ys], name=name, mode="lines", line_shape="hv",
                                  line={"width": 2}, hovertemplate=f"{name}: $%{{y:,.2f}}<extra></extra>"))
     fig.update_layout(hovermode="x unified", height=320, margin={"l": 56, "r": 16, "t": 16, "b": 40},
@@ -225,11 +239,13 @@ def overview_body(conn, venues):
 def overview(conn):
     """The venue switch drives everything here: tiles, open positions, recent bets and the bankroll chart."""
     return [
-        dcc.RadioItems(id="scope", options=list(SCOPES), value="Both", inline=True, className="seg"),
+        dcc.RadioItems(id="scope", options=list(SCOPES), value="All", inline=True, className="seg"),
         html.Div(tiles(conn, metrics.VENUES), id="tiles", className="tiles"),
         html.Section([html.H3("Bankroll"),  # its own card, so boxed() leaves the body after it bare
                       dcc.RadioItems(id="range", options=list(RANGES), value="All", inline=True, className="seg"),
-                      bankroll_chart(habits.bankroll_series(conn), "bankroll-overview")], className="card"),
+                      bankroll_chart(habits.bankroll_series(conn), "bankroll-overview"),
+                      html.P("Novig: includes bets the API can't itemize (credit-funded, parlays), at their cash.",
+                             className="note")], className="card"),
         html.Div(overview_body(conn, metrics.VENUES), id="overview-body"),
     ]
 
@@ -275,13 +291,13 @@ def listed(key, summary_and_table):
 
 def clv_tab(conn):
     rows = []
-    for scope, venues in SCOPES.items():
+    for scope, venues in CLV_SCOPES.items():
         c = metrics.clv(conn, venues)
         rows.append((scope, f"{c['with_close']} / {c['eligible']}", mean_text(c["net_cents"], c["net_ci"]),
                      mean_text(c["mean_cents"], c["ci"]), pct(c["beat"]), mean_text(c["move_cents"]), pct(c["move_beat"]),
                      usd(c["net_usd"]), usd(c["clv_usd"]), usd(c["pnl"])))
     out = [
-        dcc.RadioItems(id="clv-scope", options=list(SCOPES), value="Both", inline=True, className="seg"),
+        dcc.RadioItems(id="clv-scope", options=list(CLV_SCOPES), value="All", inline=True, className="seg"),
         html.Span(" filters the bet lists", className="sub"),
         html.H3("Singles"),
         table(("Venue", "With close / eligible", "After fees (95% CI)", "Vs mid (95% CI)", "Beat mid", "Price move",
@@ -293,7 +309,7 @@ def clv_tab(conn):
         listed("clv-singles", singles_list(conn, metrics.VENUES)),
     ]
     rows = []
-    for scope, venues in SCOPES.items():
+    for scope, venues in CLV_SCOPES.items():
         c = metrics.parlay_clv(conn, venues)
         rows.append((scope, f"{c['with_clv']} / {c['eligible']}", mean_text(c["net_cents"], c["net_ci"]),
                      mean_text(c["mean_cents"], c["ci"]), mean_text(c["markup_cents"]),
@@ -331,7 +347,7 @@ def own_money_rows(conn):
         bet = metrics.headline(conn, venues)["pnl"]
         total_own, total_bet = total_own + own, total_bet + bet
         yield scope, usd(own), usd(bet), usd(own - bet)
-    yield "Both", usd(total_own), usd(total_bet), usd(total_own - total_bet)
+    yield "All", usd(total_own), usd(total_bet), usd(total_own - total_bet)
 
 
 def performance_tab(conn):
@@ -347,9 +363,10 @@ def performance_tab(conn):
         html.H3("Own-money P&L"),
     ]
     try:
-        out.append(table(("Venue", "Own money", "Betting", "Bonus contribution"), list(own_money_rows(conn))))
-        out.append(html.P("Own money = account value − locked bonus − net deposits. Locked bonus is provisional.",
-                          className="note"))
+        out.append(table(("Venue", "Own money", "Betting", "Bonus / untracked"), list(own_money_rows(conn))))
+        out.append(html.P("Own money = account value − locked bonus − net deposits. Locked bonus is provisional."
+                          " Novig: credit-funded bets and parlays count only at their cash, so they land in"
+                          " Bonus / untracked.", className="note"))
     except TypeError:  # no balance snapshot yet
         out.append(html.P("Needs a balance snapshot (run the archive).", className="sub"))
     header = ("Segment", "Closed bets", "Stake", "P&L", "ROI", "Wins / judged", "Expected wins (95% CI)")
@@ -390,14 +407,16 @@ def filter_bets(scope, split, query):
     if q:
         rows = [b for b in rows if q in " ".join([b["label"], *b["legs"], VENUE[b["venue"]], b["venue"], b["result"],
                                                     b["sport"] or "", b["market_type"] or ""]).lower()]
-    return f"{len(rows)} bet{'' if len(rows) == 1 else 's'}", bets_table(rows)
+    note = " · cash-funded straights only; credit-funded bets and parlays aren't available from Novig's API" \
+        if scope == "Novig" else ""
+    return f"{len(rows)} bet{'' if len(rows) == 1 else 's'}{note}", bets_table(rows)
 
 
 def bets_tab(conn):
     rows = metrics.all_bets(conn)
     return [
         html.Div([
-            dcc.RadioItems(id="bets-scope", options=list(SCOPES), value="Both", inline=True, className="seg"),
+            dcc.RadioItems(id="bets-scope", options=list(SCOPES), value="All", inline=True, className="seg"),
             dcc.RadioItems(id="bets-split", options=[{"label": v, "value": k} for k, v in SPLIT_LABEL.items()],
                            value="all", inline=True, className="seg"),
             dcc.Input(id="bets-search", type="search", placeholder="Search: player, team, parlay, won…",
@@ -507,7 +526,7 @@ def habits_tab(conn):
     return [
         html.H3("Bankroll"),
         bankroll_chart(habits.bankroll_series(conn), "bankroll-habits"),
-        html.P("Bankroll = cash + open position cost, both venues. Deposits move bankroll, not betting P&L.",
+        html.P("Bankroll = cash + open position cost, all venues. Deposits move bankroll, not P&L.",
                className="note"),
         *cash_out_section(conn),
         html.H3("Stake after a win vs a loss"),
@@ -535,8 +554,10 @@ def habits_tab(conn):
         html.P(f"Maker fills: {makers} of {total}. Maker saving = taker fee paid minus the same fill's fee as a maker"
                " (Kalshi 0.0175 × C × p(1−p), assumed on every series; Polymarket rebate 0.0125 × C × p(1−p) from the"
                " schedule effective 2026-10-01, which postdates most fills), singles only. It assumes the limit order"
-               " fills at the same price, ignoring the spread you'd also save and orders that never fill.",
-               className="note"),
+               " fills at the same price, ignoring the spread you'd also save and orders that never fill."
+               " A Novig maker never pays, so its saving is the whole fee.", className="note"),
+        *([html.P(f"Novig fees on bets the API can't itemize: {usd(u)}.", className="note")]
+          if (u := habits.untracked_fees(conn)) else []),
         *spread_section(conn),
         *line_shop_section(conn),
     ]
@@ -591,7 +612,13 @@ def data_tab(conn):
                                     ("bets", reconcile.bets_cash(conn, venue))):
                 diff = computed - reported
                 rows.append((VENUE[venue], label, "OK" if abs(diff) <= reconcile.TOLERANCE else "MISMATCH", usd(diff)))
+        try:
+            gap = reconcile.novig_ledger_gap(conn)
+            rows.append(("Novig", "ledger", "OK" if abs(gap) <= reconcile.TOLERANCE else "MISMATCH", usd(gap)))
+        except TypeError:  # no Novig balance yet
+            pass
         out.append(table(("Venue", "Check", "Status", "Computed − reported"), rows))
+        out.append(html.P("Novig: no quote history, so no CLV or spread, and not in the line shop.", className="note"))
         diff = habits.bankroll_check(conn)
         out.append(html.P(f"Bankroll end point vs reported cash + open cost: "
                           f"{'OK' if abs(diff) <= reconcile.TOLERANCE else 'MISMATCH'} ({usd(diff)}).", className="note"))

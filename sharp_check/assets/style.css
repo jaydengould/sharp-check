@@ -91,7 +91,7 @@ a { color: inherit; }
 .search input::placeholder { color: var(--muted); }
 
 /* ---- headline tiles ---- */
-.tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 12px 0 4px; }
+.tiles { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin: 12px 0 4px; }
 .tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
 .tile-k { color: var(--muted); font-size: 12px; }
 .tile-v { font-size: 24px; font-weight: 600; margin: 2px 0; letter-spacing: -0.01em; }
@@ -128,7 +128,7 @@ summary:hover { color: var(--fg); }
 .best { color: var(--pos); font-weight: 600; }
 
 /* ---- phone ---- */
-@media (max-width: 900px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
   .page { padding: 8px 16px 40px; }
   .card { padding: 2px 12px 10px; border-radius: 10px; }

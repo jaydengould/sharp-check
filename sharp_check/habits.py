@@ -260,7 +260,7 @@ def line_shop(conn):
             for r in conn.execute("SELECT l.venue, l.bet_id, l.other_venue, l.is_live, l.qty, l.yours, l.theirs, l.gap,"
                                   " l.note, b.game_id FROM line_shop l LEFT JOIN bets b USING (bet_id) ORDER BY l.bet_id")]
     rows, live = [], []
-    for v in VENUES:
+    for v in ("kalshi", "polymarket"):  # Novig isn't in the line shop
         pre = [b for b in bets if b["venue"] == v and not b["live"]]
         gaps = [b for b in pre if b["gap"] is not None]
         mean, ci = metrics.mean_ci([b["gap"] / 10_000 for b in gaps], [b["game"] or b["bet_id"] for b in gaps])

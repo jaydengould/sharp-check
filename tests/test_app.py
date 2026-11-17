@@ -22,7 +22,7 @@ def test_empty_db_renders_every_tab_and_the_tiles():
     tabs = [t for t in page.children if getattr(t, "id", None) == "tabs"][0].children
     assert [t.label for t in tabs] == ["Overview", "CLV", "Performance", "Bets", "Habits", "Line shop", "Data health"]
     for venues in app.SCOPES.values():
-        assert len(app.tiles(conn, venues)) == 6
+        assert len(app.tiles(conn, venues)) == 7
 
 
 def test_headers_take_their_columns_alignment():
@@ -44,7 +44,7 @@ def test_venue_switch_rerenders_the_whole_overview(monkeypatch):
     monkeypatch.setattr(app.archive, "connect", lambda: conn)
     monkeypatch.setattr(app, "closing", lambda c: __import__("contextlib").nullcontext(c))
     tiles, body, fig = app.scope_overview("Kalshi")
-    assert len(tiles) == 6 and [c.className for c in body] == ["card", "card"] and "data" in fig
+    assert len(tiles) == 7 and [c.className for c in body] == ["card", "card"] and "data" in fig
 
 
 def test_clv_venue_switch_filters_the_bet_lists(monkeypatch):
@@ -70,9 +70,9 @@ def test_bets_tab_search_finds_a_bet_by_name(monkeypatch):
                             5000000, 0, 0, 0, 94600000, 89600000, 'settled', '2026-09-13T20:19:29.193580Z', 1, 'football', 'prop')""")
     monkeypatch.setattr(app.archive, "connect", lambda: conn)
     monkeypatch.setattr(app, "closing", lambda c: __import__("contextlib").nullcontext(c))
-    assert app.filter_bets("Both", "all", "walker")[0] == "1 bet"
+    assert app.filter_bets("All", "all", "walker")[0] == "1 bet"
     assert app.filter_bets("Kalshi", "all", "walker")[0] == "0 bets"
-    assert app.filter_bets("Both", "parlays", "")[0] == "0 bets"
+    assert app.filter_bets("All", "parlays", "")[0] == "0 bets"
 
 
 def text(node):
@@ -148,3 +148,17 @@ def test_windowed_anchors_at_cutoff_and_restarts_pnl():
     assert app.windowed(s, None, now) == s
     assert app.windowed(s, 7, now) == [("2026-01-03T00:00:00.000000Z", 100, 0), s[1], (s[2][0], 104, 4)]
     assert app.windowed(s, 3, now) == [("2026-01-07T00:00:00.000000Z", 110, 0), (s[2][0], 104, -6)]
+
+
+def test_scopes_tiles_and_clv_switch_for_novig():
+    assert list(app.SCOPES) == ["All", "Kalshi", "Polymarket", "Novig"]
+    assert list(app.CLV_SCOPES) == ["All", "Kalshi", "Polymarket"]
+    conn = archive.connect(":memory:")
+    normalize.rebuild(conn)
+    keys = [t.children[0].children for t in app.tiles(conn, ("novig",))]
+    assert keys[:2] == ["Betting P&L", "Own-money P&L"]
+    subs = {t.children[0].children: t.children[2].children for t in app.tiles(conn, ("novig",))}
+    assert subs["CLV · singles"] == "not available on Novig" and subs["Own-money P&L"] == "needs a balance snapshot"
+    assert subs["Betting P&L"].endswith("cash bets only")
+    clv = [c for c in app.clv_tab(conn) if getattr(c, "id", None) == "clv-scope"][0]
+    assert "Novig" not in clv.options
