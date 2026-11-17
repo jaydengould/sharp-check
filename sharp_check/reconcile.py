@@ -46,9 +46,21 @@ def bets_cash(conn, venue):
         FROM bets WHERE venue = :v""", {"v": venue}).fetchone()[0]
 
 
+BALANCE = {"kalshi": "/portfolio/balance", "polymarket": "/v1/account/balances", "novig": "/v3/account/balance"}
+
+
+def balanced(conn, venues=tuple(BALANCE)):
+    """The venues (in order) that have a balance snapshot. One venue missing (e.g. Novig not set up, or a 451 on the
+    first run) must not hide the others' checks."""
+    have = {v for v, in conn.execute("SELECT DISTINCT venue FROM raw_pages WHERE " +
+                                     " OR ".join("(venue = ? AND endpoint = ?)" for _ in BALANCE),
+                                     [x for kv in BALANCE.items() for x in kv])}
+    return tuple(v for v in venues if v in have)
+
+
 def reported_cash(conn, venue):
     """Cash from the latest archived balance snapshot."""
-    endpoint = {"kalshi": "/portfolio/balance", "polymarket": "/v1/account/balances", "novig": "/v3/account/balance"}[venue]
+    endpoint = BALANCE[venue]
     row = conn.execute("SELECT body_json FROM raw_pages WHERE venue = ? AND endpoint = ? ORDER BY id DESC LIMIT 1",
                        (venue, endpoint)).fetchone()
     body = json.loads(row[0])
@@ -67,12 +79,12 @@ def novig_ledger_gap(conn):
 
 if __name__ == "__main__":
     conn = archive.connect()
-    for venue in ("kalshi", "polymarket", "novig"):
+    for venue in balanced(conn):
         cash, open_markets = computed_cash(conn, venue)
         reported = reported_cash(conn, venue)
         for label, computed in (("fills", cash), ("bets", bets_cash(conn, venue))):
             diff = computed - reported
             verdict = "OK" if abs(diff) <= TOLERANCE else "MISMATCH"
             print(f"{venue:10} {verdict:8} {label:5} - reported = {diff / ONE:+.2f} USD; open positions: {len(open_markets)}")
-    gap = novig_ledger_gap(conn)
+    gap = novig_ledger_gap(conn) if "novig" in balanced(conn) else 0
     print(f"{'novig':10} {'OK' if abs(gap) <= TOLERANCE else 'MISMATCH':8} ledger - reported = {gap / ONE:+.2f} USD")

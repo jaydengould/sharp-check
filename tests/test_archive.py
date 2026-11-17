@@ -368,3 +368,24 @@ def test_novig_once_unwraps_the_wallet():
     get = lambda path: Resp(200, {"K": [{"marketId": "M"}]})
     assert archive.novig_once("/v3/portfolio/positions", "positions", get) == \
         [({"keyId": "K"}, {"positions": [{"marketId": "M"}]})]
+
+
+def test_sync_novig_markets_refetches_regraded_and_late_settled():
+    conn = archive.connect(":memory:")
+    archive.store(conn, "novig", "/v3/portfolio/fills", {}, {"items": [{"marketId": "M1"}, {"marketId": "M2"}]})
+    archive.store(conn, "novig", "/v3/history/markets/{id}", {"id": "M1"},
+                  {"market": {"marketId": "M1", "eventId": "E1", "status": "SETTLED"}})
+    archive.store(conn, "novig", "/v3/history/markets/{id}", {"id": "M2"},
+                  {"market": {"marketId": "M2", "eventId": "E1", "status": "OPEN"}})
+    archive.store(conn, "novig", "/v3/history/events/{id}", {"id": "E1"}, {"event": {"eventId": "E1", "startsTs": 1}})
+    archive.store(conn, "novig", "/v3/history/positions", {}, {"items": [
+        {"positionId": "P1", "marketId": "M1", "status": "SETTLED", "resettled": True},
+        {"positionId": "P2", "marketId": "M2", "status": "SETTLED", "resettled": False}]})
+    calls = []
+
+    def get(path):
+        calls.append(path)
+        return Resp(200, {"marketId": "x", "eventId": "E1", "status": "SETTLED"} if "markets" in path else {"eventId": "E1"})
+
+    archive.sync_novig_markets(conn, get, now="2026-11-17T00:00:00Z")  # E1 long past the 14-day give-up
+    assert [c for c in calls if "markets" in c] == ["/v3/history/markets/M1", "/v3/history/markets/M2"]

@@ -124,6 +124,7 @@ def test_bankroll_check_nets_partial_exits_of_open_bets(monkeypatch):
     conn.execute("UPDATE bets SET exit_proceeds = 2500000, exit_fees = 10000 WHERE bet_id = 'p'")
     cash = {"kalshi": 100 * ONE - 4 * ONE + 2_500_000 - 10_000, "polymarket": 0, "novig": 0}
     monkeypatch.setattr(habits.reconcile, "reported_cash", lambda c, v: cash[v])
+    monkeypatch.setattr(habits.reconcile, "balanced", lambda c: tuple(cash))
     assert habits.bankroll_check(conn) == 0
 
 

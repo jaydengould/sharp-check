@@ -36,7 +36,7 @@ def bankroll_check(conn):
     series = bankroll_series(conn)
     open_cost = conn.execute("SELECT COALESCE(SUM(stake - exit_proceeds + exit_fees), 0) FROM bets"
                              " WHERE status = 'open'").fetchone()[0]
-    return (series[-1][1] if series else 0) - sum(reconcile.reported_cash(conn, v) for v in VENUES) - open_cost
+    return (series[-1][1] if series else 0) - sum(reconcile.reported_cash(conn, v) for v in reconcile.balanced(conn)) - open_cost
 
 
 def bet_rows(conn):

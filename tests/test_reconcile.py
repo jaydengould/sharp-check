@@ -63,3 +63,10 @@ def test_novig_untracked_cash_moves_bankroll_and_pnl():
     conn = novig_rebuilt()
     series = habits.bankroll_series(conn, ("novig",))
     assert series[-1][1:] == (86_480_000, 6_480_000)  # bankroll = cash + open cost; P&L = own money here
+
+
+def test_venues_without_a_balance_are_skipped():
+    conn = archive.connect(":memory:")
+    normalize.rebuild(conn)
+    archive.store(conn, "kalshi", "/portfolio/balance", {}, {"balance_dollars": "5.00"})
+    assert reconcile.balanced(conn) == ("kalshi",)

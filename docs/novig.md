@@ -15,13 +15,14 @@ Read-only. Host `https://api.novig.com` (v3). Client: `clients.novig_get` / `nov
 ## Endpoints archived
 - `/v3/portfolio/fills`, `/v3/history/positions` (`status=OPEN,CLOSED,SETTLED`), `/v3/account/transactions`: paged by `next` → `after`. Personal reads come keyed by wallet key ID (`{"<keyId>": {"items", "next"}}`); `novig_pages` unwraps and pages with `keyId` + `after`. More than one wallet (a subaccount) raises. Transactions and balance are bare.
 - `/v3/portfolio/positions` (open, `{keyId: [..]}`, stored as `{"positions": [...]}`), `/v3/account/balance` (`{"balance": "<dollars>"}`).
-- `/v3/history/markets/{id}` (`{"market": ...}`) and `/v3/history/events/{id}` (`{"event": ...}`) per traded market, re-fetched until `SETTLED` or 14 days past the event start. Markets are two-outcome (8,000+ checked 2026-11-17); `outcomes[0]` = YES. Outcome `status`: `TBD | WIN | LOSS | PUSH | <decimal>`.
+- `/v3/history/markets/{id}` (`{"market": ...}`) and `/v3/history/events/{id}` (`{"event": ...}`) per traded market, re-fetched until `SETTLED` or 14 days past the event start. Markets are two-outcome (8,000+ checked 2026-11-17); `outcomes[0]` = YES. Outcome `status`: `TBD | WIN | LOSS | PUSH | <decimal>`. PUSH takes the venue's payout per contract from the user's settled position (0.5 if none, e.g. exited first). A market is refetched while any of its positions is `resettled`, or settled per positions but not per our page. An event with no `startsTs` gets no game row.
 - No historical bid/ask (trades and trade candles only): no CLV, no spread.
 
 ## Ledger (`/v3/account/transactions`)
 - Fields `transactionId, kind, amount` (signed dollars), `ref`, `ts` (ms). The ledger sums to the balance exactly (`reconcile.novig_ledger_gap`).
 - `ref`: FILL / FEE → `fillId`; SETTLEMENT → **`marketId`** (not positionId).
 - `FORWARDING` = cash into a trade-credit wallet, for the part of a credit bet the credit doesn't cover. `CREDIT` = inflows (most likely credit-wallet payouts; undocumented).
+- `MAKER_CREDIT` (ref = fillId) is a rebate: subtracted from that fill's fee.
 - Normalize: DEPOSIT/WITHDRAWAL → deposit/withdrawal; FILL/FEE/MAKER_CREDIT of a visible fill and SETTLEMENT of a visible market are skipped (fills and settlements carry them); other FILL/FEE/SETTLEMENT and FORWARDING/CREDIT → `untracked_bet`; any other kind fails the rebuild.
 
 ## Fees

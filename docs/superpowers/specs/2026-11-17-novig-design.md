@@ -121,4 +121,5 @@ The user bets mainly on Kalshi and Polymarket and will use Novig when its price 
 - SETTLEMENT ledger rows reference the `marketId`, so visible settlements are matched by market.
 - Fixtures are synthetic (`tests/fixtures/novig.json`), not scrubbed captures: scrubbed amounts couldn't stay consistent (ledger = balance, pnl = payout − cost). `scripts/smoke.py` prints Novig shapes only.
 - `TO_ADVANCE` → moneyline (as on Kalshi and Polymarket). A market whose event has no start is a future.
+- Review fixes: payout mismatches are listed on Data health, not fatal; events without a start get no game row; PUSH with no position payout → 0.5; maker credits are rebates on their fill; regraded and late-settled markets are refetched; venues without a balance snapshot are skipped in every check.
 - The payout check compares payouts, not `pnl` (whether Novig's position `cost` includes fees is unconfirmed).

@@ -241,13 +241,18 @@ def sync_novig_markets(conn, get=None, now=None):
     traded = {f["marketId"] for f in records(conn, "novig", ("/v3/portfolio/fills",), "items")}
     stored = {m["marketId"]: m for m in records(conn, "novig", ("/v3/history/markets/{id}",), "market")}
     starts = {e["eventId"]: e.get("startsTs") for e in records(conn, "novig", ("/v3/history/events/{id}",), "event")}
+    positions = {p["positionId"]: p for p in records(conn, "novig", ("/v3/history/positions",), "items")}.values()
+    regraded = {p["marketId"] for p in positions if p.get("resettled")}  # refetched every run: rare and cheap
+    settled = {p["marketId"] for p in positions if p["status"] == "SETTLED"}
 
     def done(market):
         m = stored.get(market)
-        if m is None:
+        if m is None or market in regraded:
             return False
-        start = starts.get(m["eventId"])
-        return m["status"] == "SETTLED" or bool(start) and epoch(now) - start / 1000 > GIVE_UP_S
+        if m["status"] == "SETTLED":
+            return True
+        start = starts.get(m["eventId"])  # settled per positions but not our page: fetch, whatever the give-up
+        return market not in settled and bool(start) and epoch(now) - start / 1000 > GIVE_UP_S
 
     todo = sorted(m for m in traded if not done(m))
     new = 0

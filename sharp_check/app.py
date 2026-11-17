@@ -110,7 +110,10 @@ def clv_tile(key, c, n_key):
 
 def own_money_tile(conn, venues):
     try:
-        own = sum(metrics.own_money(conn, v) for v in venues)
+        have = reconcile.balanced(conn, venues)
+        if not have:
+            raise TypeError
+        own = sum(metrics.own_money(conn, v) for v in have)
     except TypeError:  # no balance snapshot yet
         return tile("Own-money P&L", "–", "needs a balance snapshot")
     return tile("Own-money P&L", usd(own), "account value − net deposits", own)
@@ -140,9 +143,12 @@ def tiles(conn, venues):
 # ---- header ----
 
 def reconciled(conn):
-    """True when both venues' fills and bets cash match the reported balance; None before any balance snapshot."""
+    """True when every venue with a balance snapshot reconciles (fills and bets cash); None before any snapshot."""
     try:
-        for venue in metrics.VENUES:
+        venues = reconcile.balanced(conn)
+        if not venues:
+            return None
+        for venue in venues:
             reported = reconcile.reported_cash(conn, venue)
             for computed in (reconcile.computed_cash(conn, venue)[0], reconcile.bets_cash(conn, venue)):
                 if abs(computed - reported) > reconcile.TOLERANCE:
@@ -342,7 +348,12 @@ def headline_cells(h):
 
 def own_money_rows(conn):
     total_own = total_bet = 0
+    have = reconcile.balanced(conn)
+    if not have:
+        raise TypeError  # no balance snapshot yet
     for scope, venues in list(SCOPES.items())[1:]:
+        if venues[0] not in have:
+            continue
         own = metrics.own_money(conn, venues[0])
         bet = metrics.headline(conn, venues)["pnl"]
         total_own, total_bet = total_own + own, total_bet + bet
@@ -606,17 +617,19 @@ def data_tab(conn):
     out = [html.H3("Cash reconcile")]
     try:
         rows = []
-        for venue in metrics.VENUES:
+        if not reconcile.balanced(conn):
+            raise TypeError  # no balance snapshot yet
+        for venue in reconcile.balanced(conn):
             reported = reconcile.reported_cash(conn, venue)
             for label, computed in (("fills", reconcile.computed_cash(conn, venue)[0]),
                                     ("bets", reconcile.bets_cash(conn, venue))):
                 diff = computed - reported
                 rows.append((VENUE[venue], label, "OK" if abs(diff) <= reconcile.TOLERANCE else "MISMATCH", usd(diff)))
-        try:
+        if "novig" in reconcile.balanced(conn):
             gap = reconcile.novig_ledger_gap(conn)
             rows.append(("Novig", "ledger", "OK" if abs(gap) <= reconcile.TOLERANCE else "MISMATCH", usd(gap)))
-        except TypeError:  # no Novig balance yet
-            pass
+        rows += [("Novig", f"payout {m[:8]}… {o}", "MISMATCH", "vs Novig's position")
+                 for m, o in normalize.novig_payout_mismatches(conn)]
         out.append(table(("Venue", "Check", "Status", "Computed − reported"), rows))
         out.append(html.P("Novig: no quote history, so no CLV or spread, and not in the line shop.", className="note"))
         diff = habits.bankroll_check(conn)

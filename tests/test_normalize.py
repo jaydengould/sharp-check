@@ -695,11 +695,48 @@ def test_novig_market_needs_two_outcomes():
         normalize.rebuild(novig_conn(edit))
 
 
-def test_novig_payout_check():
+def test_novig_payout_mismatch_is_reported_not_fatal():
     def edit(pages):
         pages[1][2]["items"][1]["payout"] = "9.00000"
-    with pytest.raises(ValueError, match="payout"):
-        normalize.rebuild(novig_conn(edit))
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)  # never takes the other venues down
+    assert normalize.novig_payout_mismatches(conn) == [("M1", "yes")]
+    assert normalize.novig_payout_mismatches(novig_conn_rebuilt()) == []
+
+
+def novig_conn_rebuilt():
+    conn = novig_conn()
+    normalize.rebuild(conn)
+    return conn
+
+
+def test_novig_event_without_start_is_a_future():
+    def edit(pages):
+        del pages[8][2]["event"]["startsTs"]
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert conn.execute("SELECT COUNT(*) FROM games WHERE game_id = 'novig:E2'").fetchone() == (0,)
+    assert conn.execute("SELECT market_type, game_id FROM markets WHERE market_id = 'M2'").fetchone() == ("future", None)
+
+
+def test_novig_push_without_a_position_payout_is_a_half():
+    def edit(pages):
+        for o in pages[5][2]["market"]["outcomes"]:
+            o["status"] = "PUSH"
+        pages[1][2]["items"].pop(1)
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert conn.execute("SELECT yes_value FROM settlements WHERE market_id = 'M1'").fetchone() == (500_000,)
+
+
+def test_novig_maker_credit_is_a_rebate_on_its_fill():
+    def edit(pages):
+        pages[3][2]["items"].append({"transactionId": "t11", "kind": "MAKER_CREDIT", "amount": "0.01000",
+                                     "ref": "f-won", "ts": 1790000000000})
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert fills(conn)["f-won"]["fee"] == -10_000
+    assert conn.execute("SELECT COUNT(*) FROM cash_ledger WHERE txn_id = 't11'").fetchone() == (0,)
 
 
 def test_novig_push_takes_the_venue_payout():
