@@ -361,7 +361,8 @@ def derive_bets(conn, allocs=None):
 
 # ---- Novig (docs/novig.md): cash wallet only; credit-funded bets and parlays show only as ledger cash ----
 
-NOVIG_TRACKED = {"FILL": "fill", "FEE": "fill", "MAKER_CREDIT": "fill", "SETTLEMENT": "position"}
+NOVIG_PER_DOLLAR = 100  # a Novig contract pays 1¢ (docs: concepts/money); fills store $1-contract equivalents
+NOVIG_TRACKED = {"FILL": "fill", "FEE": "fill", "MAKER_CREDIT": "fill", "SETTLEMENT": "market"}  # ledger `ref`
 NOVIG_UNTRACKED = {"FORWARDING", "CREDIT"}  # cash into / out of trade-credit wallets (dev relations, 2026-11-17)
 NOVIG_CASH = {"DEPOSIT": "deposit", "WITHDRAWAL": "withdrawal"}
 
@@ -395,17 +396,17 @@ def novig_fills(conn):
         m = markets.get(f["marketId"])
         if m is None:
             continue
-        yield ("novig", f["fillId"], f["orderId"], f["marketId"], novig_side(m, f["outcomeId"]), f["qty"],
-               round(micros(f["cost"]) / f["qty"]), micros(f.get("fee") or "0"), int(f["taker"]), novig_iso(f["ts"]))
+        qty = f["qty"] / NOVIG_PER_DOLLAR
+        yield ("novig", f["fillId"], f["orderId"], f["marketId"], novig_side(m, f["outcomeId"]), qty,
+               round(micros(f["cost"]) / qty), micros(f.get("fee") or "0"), int(f["taker"]), novig_iso(f["ts"]))
 
 
 def novig_cash(conn):
     """Deposits and withdrawals; ledger rows of fills and positions we itemize are skipped (fills and settlements
     carry that cash); every other bet row is untracked_bet. An unmapped kind fails the rebuild."""
     markets = novig_markets(conn)
-    seen = {"fill": {f["fillId"] for f in records(conn, "novig", ("/v3/portfolio/fills",), "items")
-                     if f["marketId"] in markets},
-            "position": set(novig_positions(conn))}
+    visible = [f for f in records(conn, "novig", ("/v3/portfolio/fills",), "items") if f["marketId"] in markets]
+    seen = {"fill": {f["fillId"] for f in visible}, "market": {f["marketId"] for f in visible}}
     for t in records(conn, "novig", ("/v3/account/transactions",), "items"):
         kind = t["kind"]
         if kind in NOVIG_TRACKED and t.get("ref") in seen[NOVIG_TRACKED[kind]]:
@@ -434,7 +435,7 @@ def novig_yes_value(m, positions):
         return micros(grade)
     for p in positions.values():
         if p["marketId"] == m["marketId"] and p.get("payout") is not None and p["qty"]:
-            each = round(micros(p["payout"]) / p["qty"])
+            each = round(micros(p["payout"]) * NOVIG_PER_DOLLAR / p["qty"])
             return each if novig_side(m, p["outcomeId"]) == "yes" else ONE - each
     raise ValueError(f"Novig market {m['marketId']}: PUSH with no settled position to price it")
 
