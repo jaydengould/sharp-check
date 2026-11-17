@@ -22,7 +22,7 @@ Phases 1–4 and 6–8 are done, plus CLV for parlays. Phase 5 (sharp CLV) waits
 
 Seven tabs:
 
-- **Overview**: headline P&L, ROI, CLV after fees for singles and parlays, and wins vs. expected, with open positions, recent bets and the bankroll curve. A Both / Kalshi / Polymarket switch filters the whole page.
+- **Overview**: headline P&L, ROI, total staked, CLV after fees for singles and parlays, and wins vs. expected, then the bankroll curve (Week / Month / 3 months / Year / All) above open positions and recent bets. A Both / Kalshi / Polymarket switch filters the whole page.
 - **CLV**: summaries by venue and every scored bet, filterable by venue.
 - **Performance**: P&L by venue and bet type, own-money P&L, and segments.
 - **Bets**: every bet, with venue and type filters and a search box.
