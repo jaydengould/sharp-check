@@ -359,6 +359,131 @@ def derive_bets(conn, allocs=None):
     return bets
 
 
+# ---- Novig (docs/novig.md): cash wallet only; credit-funded bets and parlays show only as ledger cash ----
+
+NOVIG_PER_DOLLAR = 100  # a Novig contract pays 1¢ (docs: concepts/money); fills store $1-contract equivalents
+NOVIG_TRACKED = {"FILL": "fill", "FEE": "fill", "MAKER_CREDIT": "fill", "SETTLEMENT": "market"}  # ledger `ref`
+NOVIG_UNTRACKED = {"FORWARDING", "CREDIT"}  # cash into / out of trade-credit wallets (dev relations, 2026-11-17)
+NOVIG_CASH = {"DEPOSIT": "deposit", "WITHDRAWAL": "withdrawal"}
+
+
+def novig_iso(ms):
+    return iso_epoch(ms / 1000)
+
+
+def novig_markets(conn):
+    """{marketId: history market}, latest page wins. Two outcomes only: the yes/no model would misbook any other."""
+    out = {m["marketId"]: m for m in records(conn, "novig", ("/v3/history/markets/{id}",), "market")}
+    for m in out.values():
+        if len(m["outcomes"]) != 2:
+            raise ValueError(f"Novig market {m['marketId']}: {len(m['outcomes'])} outcomes, need 2 outcomes")
+    return out
+
+
+def novig_positions(conn):
+    return {p["positionId"]: p for p in records(conn, "novig", ("/v3/history/positions",), "items")}
+
+
+def novig_side(market, outcome_id):
+    return "yes" if outcome_id == market["outcomes"][0]["outcomeId"] else "no"
+
+
+def novig_fills(conn):
+    """Fills of archived markets only; a fill whose market isn't archived yet stays out, and its ledger rows then
+    count as untracked_bet (novig_cash), so cash still reconciles."""
+    markets = novig_markets(conn)
+    credits = Counter()  # a maker's share of the taker fee: a rebate, booked as a negative fee on its fill
+    for t in {t["transactionId"]: t for t in records(conn, "novig", ("/v3/account/transactions",), "items")}.values():
+        if t["kind"] == "MAKER_CREDIT":
+            credits[t.get("ref")] += micros(t["amount"])
+    for f in records(conn, "novig", ("/v3/portfolio/fills",), "items"):
+        m = markets.get(f["marketId"])
+        if m is None:
+            continue
+        qty = f["qty"] / NOVIG_PER_DOLLAR
+        yield ("novig", f["fillId"], f["orderId"], f["marketId"], novig_side(m, f["outcomeId"]), qty,
+               round(micros(f["cost"]) / qty), micros(f.get("fee") or "0") - credits[f["fillId"]], int(f["taker"]),
+               novig_iso(f["ts"]))
+
+
+def novig_cash(conn):
+    """Deposits and withdrawals; ledger rows of fills and positions we itemize are skipped (fills and settlements
+    carry that cash); every other bet row is untracked_bet. An unmapped kind fails the rebuild."""
+    markets = novig_markets(conn)
+    visible = [f for f in records(conn, "novig", ("/v3/portfolio/fills",), "items") if f["marketId"] in markets]
+    seen = {"fill": {f["fillId"] for f in visible}, "market": {f["marketId"] for f in visible}}
+    for t in records(conn, "novig", ("/v3/account/transactions",), "items"):
+        kind = t["kind"]
+        if kind in NOVIG_TRACKED and t.get("ref") in seen[NOVIG_TRACKED[kind]]:
+            continue
+        if kind in NOVIG_CASH:
+            row_kind = NOVIG_CASH[kind]
+        elif kind in NOVIG_TRACKED or kind in NOVIG_UNTRACKED:
+            row_kind = "untracked_bet"
+        else:
+            raise ValueError(f"Novig transaction {t['transactionId']}: unhandled kind {kind}")
+        yield ("novig", t["transactionId"], novig_iso(t["ts"]), row_kind, micros(t["amount"]))
+
+
+NOVIG_GRADE = {"WIN": ONE, "LOSS": 0}
+
+
+def novig_yes_value(m, positions):
+    """YES value of a graded market: WIN/LOSS, a decimal (FMV void) price, or for PUSH (a refund) the venue's own
+    payout per contract on the user's position, so the void pays what Novig paid (no settled position, e.g. it was
+    exited before the push: 0.5, which pays nothing since nothing is held)."""
+    grade = m["outcomes"][0]["status"]
+    if grade == "TBD":
+        return None
+    if grade in NOVIG_GRADE:
+        return NOVIG_GRADE[grade]
+    if grade != "PUSH":
+        return micros(grade)
+    for p in positions.values():
+        if p["marketId"] == m["marketId"] and p.get("payout") is not None and p["qty"]:
+            each = round(micros(p["payout"]) * NOVIG_PER_DOLLAR / p["qty"])
+            return each if novig_side(m, p["outcomeId"]) == "yes" else ONE - each
+    return ONE // 2
+
+
+def novig_settlements(conn):
+    positions = novig_positions(conn)
+    for m in novig_markets(conn).values():
+        if m["status"] == "SETTLED":
+            yield ("novig", m["marketId"], novig_yes_value(m, positions), novig_iso(m["settledTs"]))
+
+
+def novig_games_markets(conn):
+    events = {e["eventId"]: e for e in records(conn, "novig", ("/v3/history/events/{id}",), "event")}
+    positions = novig_positions(conn)
+    for e in events.values():
+        if e.get("startsTs"):  # no start = a future: no game
+            yield "game", (f"novig:{e['eventId']}", "novig", e.get("league"), e["description"], novig_iso(e["startsTs"]))
+    for m in novig_markets(conn).values():
+        e = events.get(m["eventId"], {})
+        mtype = "future" if not e.get("startsTs") else classify.novig_type(m["marketType"])
+        a, b = m["outcomes"]
+        yield "market", ("novig", m["marketId"], m["eventId"], e.get("description"), (e.get("sport") or "other").lower(),
+                         e.get("league"), mtype, float(m["strike"]) if m.get("strike") else None,
+                         f"novig:{m['eventId']}" if e.get("startsTs") else None, a["name"], b["name"],
+                         novig_yes_value(m, positions))
+
+
+def novig_payout_mismatches(conn):
+    """[(market, yes|no)] whose derived payout differs from Novig's own position payout by over 1¢ (pnl-rules:
+    Novig). Reported on Data health, never fatal. Markets not yet SETTLED in the archive are skipped."""
+    markets = novig_markets(conn)
+    venue_paid = Counter()
+    for p in novig_positions(conn).values():
+        if p["status"] == "SETTLED" and markets.get(p["marketId"], {}).get("status") == "SETTLED":
+            venue_paid[(p["marketId"], novig_side(markets[p["marketId"]], p["outcomeId"]))] += micros(p["payout"])
+    ours = Counter()
+    for market, outcome, payout in conn.execute(
+            "SELECT market_id, outcome, payout FROM bets WHERE venue = 'novig' AND status IN ('settled', 'void')"):
+        ours[(market, outcome)] += payout
+    return sorted(k for k in venue_paid.keys() | ours.keys() if abs(venue_paid[k] - ours[k]) > 10_000)
+
+
 DERIVED = ("fills", "cash_ledger", "parlay_legs", "settlements", "bets", "games", "markets", "quotes",
            "fill_costs", "line_shop", "closing_lines")  # closing_lines: old name of quotes, dropped from older DBs
 
@@ -682,6 +807,8 @@ def spread_costs(conn, allocs):
     clv_legs = archive.parlay_clv_legs(conn)
     rows = []
     for venue, fill_id, bet_id, role, qty in allocs:
+        if venue == "novig":  # no quote history (docs/novig.md)
+            continue
         market, outcome, price, ts = fills[(venue, fill_id)]
         is_parlay, fair_entry = bets[bet_id]
         if not is_parlay:
@@ -770,18 +897,19 @@ def rebuild(conn, manual_path=None):
     conn.executescript(SCHEMA)
     with conn:
         # Later pages repeat records with refreshed market metadata; last write wins.
-        for rows in (kalshi_fills(conn), pm_fills(conn)):
+        for rows in (kalshi_fills(conn), pm_fills(conn), novig_fills(conn)):
             conn.executemany("INSERT OR REPLACE INTO fills VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", list(rows))
-        for rows in (kalshi_cash(conn), kalshi_transfers(conn), pm_cash(conn), manual_cash(manual_path)):
+        for rows in (kalshi_cash(conn), kalshi_transfers(conn), pm_cash(conn), novig_cash(conn),
+                     manual_cash(manual_path)):
             conn.executemany("INSERT OR REPLACE INTO cash_ledger VALUES (?, ?, ?, ?, ?)", list(rows))
         for rows in (kalshi_legs(conn), pm_legs(conn)):  # every fill of a parlay repeats its legs
             conn.executemany("INSERT OR REPLACE INTO parlay_legs VALUES (?, ?, ?, ?)", list(rows))
-        for rows in (kalshi_settlements(conn), pm_settlements(conn)):
+        for rows in (kalshi_settlements(conn), pm_settlements(conn), novig_settlements(conn)):
             conn.executemany("INSERT OR REPLACE INTO settlements VALUES (?, ?, ?, ?)", list(rows))
         allocs = []
         conn.executemany(f"INSERT INTO bets VALUES ({', '.join('?' * 30)})",
                          (b + (None,) * 12 for b in derive_bets(conn, allocs)))
-        for source in (kalshi_games_markets(conn), pm_games_markets(conn)):
+        for source in (kalshi_games_markets(conn), pm_games_markets(conn), novig_games_markets(conn)):
             for kind, row in list(source):
                 table = "games" if kind == "game" else "markets"
                 conn.execute(f"INSERT OR {'REPLACE' if kind == 'game' else 'IGNORE'} INTO {table}"
@@ -820,3 +948,8 @@ if __name__ == "__main__":
     for code, n in pm_other.items():
         if not classify.pm_expected_other(code):
             print(f"polymarket market_type other: {code}={n}")
+    for market, outcome in novig_payout_mismatches(conn):
+        print(f"novig      payout mismatch: {market} {outcome} (see Data health)")
+    for m in novig_markets(conn).values():
+        if classify.novig_type(m["marketType"]) == "other" and not classify.novig_expected_other(m["marketType"]):
+            print(f"novig      market_type other: {m['marketType']}")

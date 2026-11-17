@@ -1,0 +1,34 @@
+[
+  ["/v3/portfolio/fills", {"keyId": "K"}, {"items": [
+    {"fillId": "f-open", "orderId": "o2", "marketId": "M2", "outcomeId": "M2b", "qty": 400, "cost": "2.00000", "fee": "0.06000", "taker": true, "ts": 1791000000000},
+    {"fillId": "f-won", "orderId": "o1", "marketId": "M1", "outcomeId": "M1a", "qty": 1000, "cost": "5.50000", "taker": true, "ts": 1790000000000}
+  ]}],
+  ["/v3/history/positions", {"keyId": "K"}, {"items": [
+    {"positionId": "P2", "marketId": "M2", "outcomeId": "M2b", "qty": 400, "cost": "2.06000", "status": "OPEN", "result": "TBD", "resettled": false},
+    {"positionId": "P1", "marketId": "M1", "outcomeId": "M1a", "qty": 1000, "cost": "5.50000", "status": "SETTLED", "result": "WIN", "payout": "10.00000", "pnl": "4.50000", "settledTs": 1790100000000, "resettled": false}
+  ]}],
+  ["/v3/portfolio/positions", {"keyId": "K"}, {"positions": [
+    {"marketId": "M2", "outcomeId": "M2b", "qty": 400, "cost": "2.06000"}
+  ]}],
+  ["/v3/account/transactions", {}, {"items": [
+    {"transactionId": "t1", "kind": "DEPOSIT", "amount": "100.00000", "ref": "r1", "ts": 1789000000000},
+    {"transactionId": "t2", "kind": "FORWARDING", "amount": "-3.00000", "ref": "r2", "ts": 1789500000000},
+    {"transactionId": "t3", "kind": "FILL", "amount": "-1.00000", "ref": "f-credit", "ts": 1789500000000},
+    {"transactionId": "t4", "kind": "FEE", "amount": "-0.02000", "ref": "f-credit", "ts": 1789500000000},
+    {"transactionId": "t5", "kind": "FILL", "amount": "-5.50000", "ref": "f-won", "ts": 1790000000000},
+    {"transactionId": "t6", "kind": "SETTLEMENT", "amount": "10.00000", "ref": "M1", "ts": 1790100000000},
+    {"transactionId": "t7", "kind": "CREDIT", "amount": "6.00000", "ref": "r3", "ts": 1790200000000},
+    {"transactionId": "t8", "kind": "WITHDRAWAL", "amount": "-20.00000", "ref": "r4", "ts": 1790300000000},
+    {"transactionId": "t9", "kind": "FILL", "amount": "-2.00000", "ref": "f-open", "ts": 1791000000000},
+    {"transactionId": "t10", "kind": "FEE", "amount": "-0.06000", "ref": "f-open", "ts": 1791000000000}
+  ]}],
+  ["/v3/account/balance", {}, {"balance": "84.42000"}],
+  ["/v3/history/markets/{id}", {"id": "M1"}, {"market": {"marketId": "M1", "eventId": "E1", "description": "CHI -3.5", "marketType": "SPREAD", "status": "SETTLED", "strike": "-3.5", "voids": "PUSH", "settledTs": 1790100000000, "fee": {"coefficient": "0.06", "makerCredit": "0.25", "charged": "WHEN_LIVE"}, "outcomes": [
+    {"outcomeId": "M1a", "name": "CHI -3.5", "status": "WIN", "subjectId": "s1"},
+    {"outcomeId": "M1b", "name": "NYJ +3.5", "status": "LOSS", "subjectId": "s2"}]}}],
+  ["/v3/history/markets/{id}", {"id": "M2"}, {"market": {"marketId": "M2", "eventId": "E2", "description": "Receptions", "marketType": "RECEPTIONS_PROTECTED", "status": "OPEN", "strike": "4.5", "voids": "PUSH", "fee": {"coefficient": "0.06", "makerCredit": "0.25", "charged": "WHEN_LIVE"}, "outcomes": [
+    {"outcomeId": "M2a", "name": "Over 4.5", "status": "TBD", "subjectId": "s3"},
+    {"outcomeId": "M2b", "name": "Under 4.5", "status": "TBD", "subjectId": "s3"}]}}],
+  ["/v3/history/events/{id}", {"id": "E1"}, {"event": {"eventId": "E1", "description": "New York Jets @ Chicago Bears", "sport": "FOOTBALL", "league": "NFL", "status": "FINAL", "startsTs": 1790050000000}}],
+  ["/v3/history/events/{id}", {"id": "E2"}, {"event": {"eventId": "E2", "description": "Green Bay Packers @ Detroit Lions", "sport": "FOOTBALL", "league": "NFL", "status": "OPEN_PREGAME", "startsTs": 1791100000000}}]
+]

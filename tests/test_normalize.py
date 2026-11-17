@@ -640,3 +640,110 @@ def test_a_fill_is_priced_only_from_a_page_whose_window_covers_its_key():
     rows = {r[0]: r[1:] for r in conn.execute("SELECT fill_id, cost, note FROM fill_costs")}
     assert rows["a"] == (10_000, None)
     assert rows["b"] == (None, "no quote")    # not the 3-minute-old quote from a's page
+
+
+def novig_conn(edit=None):
+    """raw_pages from the synthetic Novig fixture; `edit(pages)` may change the pages first."""
+    pages = load("novig")
+    if edit:
+        edit(pages)
+    conn = archive.connect(":memory:")
+    for endpoint, params, body in pages:
+        archive.store(conn, "novig", endpoint, params, body)
+    return conn
+
+
+def test_novig_fills_and_markets():
+    conn = novig_conn()
+    normalize.rebuild(conn)
+    got = fills(conn)
+    assert got["f-won"] == {"venue": "novig", "fill_id": "f-won", "order_id": "o1", "market_id": "M1", "outcome": "yes",
+                            "qty": 10, "price": 550_000, "fee": 0, "is_taker": 1, "ts": "2026-09-21T14:13:20.000000Z"}
+    assert got["f-open"]["outcome"] == "no" and got["f-open"]["fee"] == 60_000
+    m = conn.execute("SELECT title, sport, league, market_type, line, game_id, label_yes, label_no, yes_value FROM markets"
+                     " WHERE venue = 'novig' ORDER BY market_id").fetchall()
+    assert m == [("New York Jets @ Chicago Bears", "football", "NFL", "spread", -3.5, "novig:E1", "CHI -3.5", "NYJ +3.5",
+                  1_000_000),
+                 ("Green Bay Packers @ Detroit Lions", "football", "NFL", "prop", 4.5, "novig:E2", "Over 4.5",
+                  "Under 4.5", None)]
+    assert conn.execute("SELECT start_time FROM games WHERE game_id = 'novig:E1'").fetchone() == \
+        ("2026-09-22T04:06:40.000000Z",)
+    bets = conn.execute("SELECT bet_id, status, realized_pnl, link FROM bets WHERE venue = 'novig' ORDER BY bet_id").fetchall()
+    assert bets == [("novig:M1:1", "settled", 4_500_000, "game"), ("novig:M2:1", "open", None, "game")]
+
+
+def test_novig_ledger_kinds():
+    conn = novig_conn()
+    normalize.rebuild(conn)
+    rows = conn.execute("SELECT txn_id, kind, amount FROM cash_ledger WHERE venue = 'novig' ORDER BY ts, txn_id").fetchall()
+    assert rows == [("t1", "deposit", 100_000_000), ("t2", "untracked_bet", -3_000_000),
+                    ("t3", "untracked_bet", -1_000_000), ("t4", "untracked_bet", -20_000),
+                    ("t7", "untracked_bet", 6_000_000), ("t8", "withdrawal", -20_000_000)]
+
+
+def test_novig_unknown_ledger_kind_fails():
+    def edit(pages):
+        pages[3][2]["items"].append({"transactionId": "tx", "kind": "ADJUSTMENT", "amount": "1", "ref": "x", "ts": 1})
+    with pytest.raises(ValueError, match="ADJUSTMENT"):
+        normalize.rebuild(novig_conn(edit))
+
+
+def test_novig_market_needs_two_outcomes():
+    def edit(pages):
+        pages[5][2]["market"]["outcomes"].append({"outcomeId": "M1c", "name": "Draw", "status": "LOSS"})
+    with pytest.raises(ValueError, match="2 outcomes"):
+        normalize.rebuild(novig_conn(edit))
+
+
+def test_novig_payout_mismatch_is_reported_not_fatal():
+    def edit(pages):
+        pages[1][2]["items"][1]["payout"] = "9.00000"
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)  # never takes the other venues down
+    assert normalize.novig_payout_mismatches(conn) == [("M1", "yes")]
+    assert normalize.novig_payout_mismatches(novig_conn_rebuilt()) == []
+
+
+def novig_conn_rebuilt():
+    conn = novig_conn()
+    normalize.rebuild(conn)
+    return conn
+
+
+def test_novig_event_without_start_is_a_future():
+    def edit(pages):
+        del pages[8][2]["event"]["startsTs"]
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert conn.execute("SELECT COUNT(*) FROM games WHERE game_id = 'novig:E2'").fetchone() == (0,)
+    assert conn.execute("SELECT market_type, game_id FROM markets WHERE market_id = 'M2'").fetchone() == ("future", None)
+
+
+def test_novig_push_without_a_position_payout_is_a_half():
+    def edit(pages):
+        for o in pages[5][2]["market"]["outcomes"]:
+            o["status"] = "PUSH"
+        pages[1][2]["items"].pop(1)
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert conn.execute("SELECT yes_value FROM settlements WHERE market_id = 'M1'").fetchone() == (500_000,)
+
+
+def test_novig_maker_credit_is_a_rebate_on_its_fill():
+    def edit(pages):
+        pages[3][2]["items"].append({"transactionId": "t11", "kind": "MAKER_CREDIT", "amount": "0.01000",
+                                     "ref": "f-won", "ts": 1790000000000})
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert fills(conn)["f-won"]["fee"] == -10_000
+    assert conn.execute("SELECT COUNT(*) FROM cash_ledger WHERE txn_id = 't11'").fetchone() == (0,)
+
+
+def test_novig_push_takes_the_venue_payout():
+    def edit(pages):
+        for o in pages[5][2]["market"]["outcomes"]:
+            o["status"] = "PUSH"
+        pages[1][2]["items"][1].update(result="PUSH", payout="5.50000", pnl="0.00000")
+    conn = novig_conn(edit)
+    normalize.rebuild(conn)
+    assert conn.execute("SELECT status, realized_pnl FROM bets WHERE bet_id = 'novig:M1:1'").fetchone() == ("void", 0)

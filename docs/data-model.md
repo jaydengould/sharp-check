@@ -13,6 +13,7 @@ UTC timestamps, money as integer micro-dollars. This is the planned schema. Upda
 - Also stores Kalshi's fee-change history (endpoint `/series/fee_changes`, body `{"series_fee_change_arr": [...]}`), for past line-shop fees.
 - Also stores Polymarket market records (`/v1/market/slug/{slug}`, body `{"market": ...}`) for every traded single and parlay leg, re-fetched each run until `MARKET_STATUS_RESOLVED` or 14 days past `gameStartTime`. A 404 isn't stored.
 - Also stores balance snapshots (Kalshi `/portfolio/balance`, Polymarket `/v1/account/balances`), one new page per changed balance, starting 2026-10-02.
+- Novig pages (phase 9): fills, history positions, open positions, transactions, balance, and `/v3/history/markets/{id}` / `/v3/history/events/{id}` per traded market (docs/novig.md).
 - Live: `data/sharp_check.db` (gitignored).
 
 ### `markets`
@@ -29,7 +30,7 @@ UTC timestamps, money as integer micro-dollars. This is the planned schema. Upda
 
 ### `fills`
 - Columns: `venue, fill_id, order_id, market_id, outcome, qty, price, fee, is_taker, ts`.
-- Every fill is normalized to "acquire `outcome` at `price`". `outcome` is `yes|no` on both venues (Polymarket long = yes). `price` is micro-dollars per contract of that outcome; `qty` is REAL (fractional contracts); negative `fee` = rebate.
+- Every fill is normalized to "acquire `outcome` at `price`". Novig: `outcome` = yes for `outcomes[0]`; `qty` = Novig qty ÷ 100 (1¢ contracts as $1 equivalents). `outcome` is `yes|no` on both venues (Polymarket long = yes). `price` is micro-dollars per contract of that outcome; `qty` is REAL (fractional contracts); negative `fee` = rebate.
 - `qty` sums are floats: round (e.g. to 4 decimals) before testing whether a position is flat. Raw sums come out as `-0.0` or 1e-15.
 - Built by `sharp_check/normalize.py` (`python -m sharp_check.normalize`), which drops and refills it from `raw_pages`.
 
@@ -41,14 +42,15 @@ UTC timestamps, money as integer micro-dollars. This is the planned schema. Upda
 
 ### `cash_ledger`
 - Columns: `venue, txn_id, ts, kind, amount`. Key: `(venue, txn_id, kind)`.
-- `kind` is one of `deposit | deposit_fee | withdrawal | bonus | perps_transfer`. `amount` is signed: + means into the account.
+- `kind` is one of `deposit | deposit_fee | withdrawal | bonus | perps_transfer | untracked_bet`. `amount` is signed: + means into the account.
 - Only movements reflected in the reported balance. Failed Kalshi and rejected Polymarket ones are skipped. Polymarket pending deposits count (already in `currentBalance`); pending withdrawals are skipped until completed (held as a reservation). Any other status, or an unknown Polymarket balance-change type, fails the rebuild.
 - `perps_transfer`: Kalshi moves between predictions and perps (perps are out of scope, so this is cash leaving or entering). Pending transfers count, because the reported balance already includes them.
 - `data/manual_cash.csv` (gitignored, columns `venue,date,kind,amount,note`) adds cash the APIs don't expose. Kind `bonus` is booked; `perps_bonus` is kept for the record and skipped. Tests never read it; only the CLI passes its path.
+- `untracked_bet` (Novig): cash of bets the API can't itemize (credit-funded bets, parlays): FORWARDING, CREDIT and FILL/FEE/SETTLEMENT rows not tied to a visible fill or market. Bet cash, so it moves the bankroll chart's P&L line too.
 - Polymarket `REFERRAL_BONUS` = incentive credit released as positions change. It's cash in, not betting P&L.
 
 ### `games`
-- Columns: `game_id, venue, league, title, start_time`. Per venue: `kalshi:<milestone id>` (archived `/milestones`) or `polymarket:<event slug>` (market `gameStartTime`, leg `eventStartTime`). Cross-venue identity (`odds_event_id`, Sportradar IDs) is phase 5.
+- Columns: `game_id, venue, league, title, start_time`. Per venue: `kalshi:<milestone id>` (archived `/milestones`), `novig:<eventId>`, or `polymarket:<event slug>` (market `gameStartTime`, leg `eventStartTime`). Cross-venue identity (`odds_event_id`, Sportradar IDs) is phase 5.
 
 ### `team_aliases` and `match_overrides` (phase 5)
 - `team_aliases`: `league, alias, canonical`.
