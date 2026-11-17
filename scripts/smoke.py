@@ -13,7 +13,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from sharp_check.clients import gateway_get, kalshi_get, kalshi_pages, pm_get, pm_pages  # noqa: E402
+from sharp_check.clients import gateway_get, kalshi_get, kalshi_pages, novig_get, novig_pages, pm_get, pm_pages  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
 
@@ -199,6 +199,23 @@ def smoke_polymarket():
     print("institutional executions search (no auth):", r.status_code)
 
 
+def smoke_novig():
+    """Shapes and counts only. Novig fixtures are synthetic (tests/fixtures/novig.json): its money fields can't be
+    scrubbed and stay consistent (ledger sums to balance, pnl = payout - cost)."""
+    section("Novig")
+    try:
+        for path, params in (("/v3/portfolio/fills", None), ("/v3/history/positions", {"status": "OPEN,CLOSED,SETTLED"}),
+                             ("/v3/account/transactions", None)):
+            items = [x for _, page in novig_pages(path, params) for x in page["items"]]
+            print(f"  {path}: {len(items)} records, ts {date_range(items, 'ts')}, fields {sorted(set(keys(items[0]))) if items else []}")
+        r = novig_get("/v3/account/balance")
+        r.raise_for_status()
+        print(f"  /v3/account/balance: fields {sorted(r.json())}")
+    except requests.HTTPError as e:
+        print(f"  Novig: {e}")
+
+
 if __name__ == "__main__":
     smoke_kalshi()
     smoke_polymarket()
+    smoke_novig()

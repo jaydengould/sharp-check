@@ -318,3 +318,53 @@ def test_kalshi_markets_include_legs_of_parlays_with_an_exit():
 
     archive.sync_kalshi_markets(conn, get)
     assert calls == ["/markets/LA", "/markets/LB"]   # spread pricing needs exited parlays' leg results
+
+
+def test_sync_novig_markets_refetches_until_settled():
+    conn = archive.connect(":memory:")
+    archive.store(conn, "novig", "/v3/portfolio/fills", {}, {"items": [{"marketId": "M1"}, {"marketId": "M2"}]})
+    archive.store(conn, "novig", "/v3/history/markets/{id}", {"id": "M1"},
+                  {"market": {"marketId": "M1", "eventId": "E1", "status": "SETTLED"}})
+    calls = []
+
+    def get(path):
+        calls.append(path)
+        if path.startswith("/v3/history/markets/"):
+            return Resp(200, {"marketId": path.rsplit("/", 1)[1], "eventId": "E2", "status": "OPEN"})
+        return Resp(200, {"eventId": "E2", "startsTs": 1_790_000_000_000})
+
+    assert archive.sync_novig_markets(conn, get, now="2026-10-01T00:00:00Z")
+    assert calls == ["/v3/history/markets/M2", "/v3/history/events/E2"]
+    calls.clear()
+    assert archive.sync_novig_markets(conn, get, now="2026-11-17T00:00:00Z")  # E2 started > 14 days before
+    assert calls == []
+
+
+def test_sync_novig_markets_reports_a_failure():
+    conn = archive.connect(":memory:")
+    archive.store(conn, "novig", "/v3/portfolio/fills", {}, {"items": [{"marketId": "M1"}]})
+
+    def get(path):
+        raise RuntimeError("Novig location check failed")
+
+    assert not archive.sync_novig_markets(conn, get)
+
+
+def test_novig_excluded_from_close_spread_and_line_shop():
+    conn = archive.connect(":memory:")
+    conn.executescript(normalize.SCHEMA)
+    conn.execute("""INSERT INTO bets (bet_id, venue, market_id, outcome, is_parlay, opened_ts, is_live, entry_qty,
+                    avg_entry, stake, exit_qty, exit_proceeds, exit_fees, payout, status, start_time, link,
+                    market_type) VALUES ('novig:M:1', 'novig', 'M', 'yes', 0, 't', 0, 1, 1, 1, 0, 0, 0, 0, 'open',
+                    '2026-09-01T00:00:00.000000Z', 'game', 'spread')""")
+    conn.execute("INSERT INTO fills VALUES ('novig', 'f', 'o', 'M', 'yes', 1, 500000, 0, 1,"
+                 " '2026-09-01T00:00:00.000000Z')")
+    assert archive.line_shop_bets(conn) == []
+    assert archive.spread_targets(conn)[0] == set()
+    assert conn.execute(f"SELECT COUNT(*) FROM bets WHERE {archive.CLV_ELIGIBLE}").fetchone()[0] == 0
+
+
+def test_novig_once_unwraps_the_wallet():
+    get = lambda path: Resp(200, {"K": [{"marketId": "M"}]})
+    assert archive.novig_once("/v3/portfolio/positions", "positions", get) == \
+        [({"keyId": "K"}, {"positions": [{"marketId": "M"}]})]

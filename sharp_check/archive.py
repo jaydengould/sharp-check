@@ -50,8 +50,14 @@ ENDPOINTS = [
     ("polymarket", "/v1/portfolio/activities", clients.pm_pages, 100),
     ("polymarket", "/v1/portfolio/positions", clients.pm_pages, 100),
     ("polymarket", "/v1/account/balances", None, None),
+    # Novig cash wallet (read-only key; docs/novig.md). Credit-funded bets and parlays aren't itemized by any route.
+    ("novig", "/v3/portfolio/fills", clients.novig_pages, 500),
+    ("novig", "/v3/history/positions", partial(clients.novig_pages, params={"status": "OPEN,CLOSED,SETTLED"}), 500),
+    ("novig", "/v3/portfolio/positions", lambda endpoint, limit: novig_once(endpoint, "positions"), None),
+    ("novig", "/v3/account/transactions", clients.novig_pages, 500),
+    ("novig", "/v3/account/balance", None, None),
 ]
-GETTERS = {"kalshi": clients.kalshi_get, "polymarket": clients.pm_get}
+GETTERS = {"kalshi": clients.kalshi_get, "polymarket": clients.pm_get, "novig": clients.novig_get}
 
 
 def kalshi_once(endpoint, params):
@@ -59,8 +65,19 @@ def kalshi_once(endpoint, params):
     r.raise_for_status()
     return [(params, r.json())]
 
+
+def novig_once(endpoint, key, get=None):
+    """One unpaged Novig read, unwrapped from its wallet envelope and stored as {key: value}."""
+    r = (get or clients.novig_get)(endpoint)
+    r.raise_for_status()
+    body = r.json()
+    if len(body) != 1:
+        raise ValueError("Novig: more than one wallet")
+    (wallet, value), = body.items()
+    return [({"keyId": wallet}, {key: value})]
+
 # Bets that get market CLV (docs/pnl-rules.md). Voids are dropped later, once settled.
-CLV_ELIGIBLE = ("is_parlay = 0 AND link = 'game' AND is_live = 0"
+CLV_ELIGIBLE = ("venue != 'novig' AND is_parlay = 0 AND link = 'game' AND is_live = 0"
                 " AND market_type IN ('moneyline', 'spread', 'total', 'prop')")
 CLOSE_ENDPOINTS = {"kalshi": "/markets/{ticker}/candlesticks", "polymarket": "/v1/price-history"}
 CLOSE_WINDOW = 3600  # seconds before start; an older quote is stale
@@ -213,6 +230,45 @@ def sync_pm_markets(conn, get=clients.gateway_get, now=None):
     print(f"{'polymarket':10} {'/v1/market/slug/{slug}':28} fetched={len(todo)} new={new} missing={missing}")
 
 
+def sync_novig_markets(conn, get=None, now=None):
+    """Archive the history record of every traded Novig market and its event (title, league, start, grades).
+
+    Re-fetched until SETTLED or two weeks past the event's start. Returns False on a failure (e.g. the location
+    check), which is reported, so the rest of the archive run carries on.
+    """
+    get = get or clients.novig_get
+    now = now or utc_now()
+    traded = {f["marketId"] for f in records(conn, "novig", ("/v3/portfolio/fills",), "items")}
+    stored = {m["marketId"]: m for m in records(conn, "novig", ("/v3/history/markets/{id}",), "market")}
+    starts = {e["eventId"]: e.get("startsTs") for e in records(conn, "novig", ("/v3/history/events/{id}",), "event")}
+
+    def done(market):
+        m = stored.get(market)
+        if m is None:
+            return False
+        start = starts.get(m["eventId"])
+        return m["status"] == "SETTLED" or bool(start) and epoch(now) - start / 1000 > GIVE_UP_S
+
+    todo = sorted(m for m in traded if not done(m))
+    new = 0
+    try:
+        for market in todo:
+            r = get(f"/v3/history/markets/{market}")
+            r.raise_for_status()
+            m = r.json()
+            new += store(conn, "novig", "/v3/history/markets/{id}", {"id": market}, {"market": m})
+            r = get(f"/v3/history/events/{m['eventId']}")
+            r.raise_for_status()
+            new += store(conn, "novig", "/v3/history/events/{id}", {"id": m["eventId"]}, {"event": r.json()})
+        conn.commit()
+    except Exception as e:  # never print response headers (they carry auth)
+        conn.rollback()
+        print(f"{'novig':10} {'/v3/history/markets/{id}':28} FAILED: {type(e).__name__}: {str(e)[:200]}")
+        return False
+    print(f"{'novig':10} {'/v3/history/markets/{id}':28} fetched={len(todo)} new={new}")
+    return True
+
+
 def epoch(iso):
     return int(datetime.fromisoformat(iso.replace("Z", "+00:00")).timestamp())
 
@@ -272,7 +328,7 @@ def spread_targets(conn):
     """(wanted, keep_empty): (venue, market, key) for every single's fill and, per leg, every exit fill of an eligible
     parlay. keep_empty = the Kalshi exit-leg ones: no candles there means the leg's market had closed (decided)."""
     want = {(v, m, fill_key(v, ts)) for v, m, ts in conn.execute(
-        "SELECT venue, market_id, ts FROM fills WHERE (venue, market_id) NOT IN"
+        "SELECT venue, market_id, ts FROM fills WHERE venue != 'novig' AND (venue, market_id) NOT IN"
         " (SELECT venue, market_id FROM parlay_legs)")}
     keep, legs = set(), parlay_clv_legs(conn)
     for bet_id, venue, market, outcome, opened, closed in conn.execute(
@@ -333,7 +389,7 @@ def sync_closes(conn, kalshi_get=clients.kalshi_get, gateway_get=clients.gateway
 
 # ---- phase 8b: the other venue's price at each past single (docs/pnl-rules.md, line shop) ----
 
-LINE_SHOP_ELIGIBLE = "is_parlay = 0 AND link = 'game' AND market_type IN ('moneyline', 'spread', 'total', 'prop')"
+LINE_SHOP_ELIGIBLE = "venue != 'novig' AND is_parlay = 0 AND link = 'game' AND market_type IN ('moneyline', 'spread', 'total', 'prop')"
 LS_WINDOW = 3 * 3600  # seconds either side of a start time when looking for the Kalshi milestone of a Polymarket game
 
 
@@ -597,6 +653,7 @@ if __name__ == "__main__":
     sync_kalshi_markets(conn)  # after fills, so newly traded tickers are included
     sync_kalshi_milestones(conn)  # after market records: needs their event tickers and legs
     sync_pm_markets(conn)
+    ok = sync_novig_markets(conn) and ok
     from sharp_check import normalize  # late: normalize imports archive
     normalize.rebuild(conn, normalize.MANUAL_CASH)  # closes need fresh bets (start times, eligibility)
     ok = sync_line_shop(conn) and ok
