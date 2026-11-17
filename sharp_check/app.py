@@ -114,6 +114,8 @@ def tiles(conn, venues):
     return [
         tile("Betting P&L", usd(h["pnl"]), f"ROI {roi} · {h['bets']} closed bets", h["pnl"]),
         tile("ROI", roi, f"on {usd(h['stake'])} staked", h["roi"], "roi"),
+        tile("Total staked", usd(h["stake"]),
+             f"closed bets · + {usd(sum(b['cost'] for b in metrics.open_bets(conn, venues)))} open at cost"),
         clv_tile("CLV · singles", metrics.clv(conn, venues), "with_close"),
         clv_tile("CLV · parlays", metrics.parlay_clv(conn, venues), "with_clv"),
         tile("Wins vs expected", f"{h['wins']} / {h['expected']:.1f}",

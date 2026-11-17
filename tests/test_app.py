@@ -22,7 +22,7 @@ def test_empty_db_renders_every_tab_and_the_tiles():
     tabs = [t for t in page.children if getattr(t, "id", None) == "tabs"][0].children
     assert [t.label for t in tabs] == ["Overview", "CLV", "Performance", "Bets", "Habits", "Line shop", "Data health"]
     for venues in app.SCOPES.values():
-        assert len(app.tiles(conn, venues)) == 5
+        assert len(app.tiles(conn, venues)) == 6
 
 
 def test_headers_take_their_columns_alignment():
@@ -44,7 +44,7 @@ def test_venue_switch_rerenders_the_whole_overview(monkeypatch):
     monkeypatch.setattr(app.archive, "connect", lambda: conn)
     monkeypatch.setattr(app, "closing", lambda c: __import__("contextlib").nullcontext(c))
     tiles, body, fig = app.scope_overview("Kalshi")
-    assert len(tiles) == 5 and [c.className for c in body] == ["card", "card"] and "data" in fig
+    assert len(tiles) == 6 and [c.className for c in body] == ["card", "card"] and "data" in fig
 
 
 def test_clv_venue_switch_filters_the_bet_lists(monkeypatch):
