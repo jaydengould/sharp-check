@@ -2,7 +2,7 @@
 import subprocess
 import sys
 from contextlib import closing
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from dash import ClientsideFunction, Dash, Input, Output, State, ctx, dcc, html, no_update
 import plotly.graph_objects as go
@@ -170,6 +170,19 @@ def bankroll_figure(series):
     return fig.to_plotly_json()
 
 
+RANGES = {"Week": 7, "Month": 30, "3 months": 91, "Year": 365, "All": None}
+
+
+def windowed(series, days, now=None):
+    """Points from `days` ago on, anchored at the cutoff with the balance then. P&L restarts at 0: P&L over the window."""
+    if days is None:
+        return series
+    cut = ((now or datetime.now(timezone.utc)) - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    before = [s for s in series if s[0] < cut]
+    bank0, pnl0 = before[-1][1:] if before else (0, 0)
+    return [(cut, bank0, 0)] * bool(before) + [(ts, b, p - pnl0) for ts, b, p in series if ts >= cut]
+
+
 def bankroll_chart(series, graph_id):
     """The graph plus a store holding its unthemed figure; the theme callback paints the store into the graph."""
     fig = bankroll_figure(series)
@@ -212,9 +225,10 @@ def overview(conn):
     return [
         dcc.RadioItems(id="scope", options=list(SCOPES), value="Both", inline=True, className="seg"),
         html.Div(tiles(conn, metrics.VENUES), id="tiles", className="tiles"),
+        html.Section([html.H3("Bankroll"),  # its own card, so boxed() leaves the body after it bare
+                      dcc.RadioItems(id="range", options=list(RANGES), value="All", inline=True, className="seg"),
+                      bankroll_chart(habits.bankroll_series(conn), "bankroll-overview")], className="card"),
         html.Div(overview_body(conn, metrics.VENUES), id="overview-body"),
-        html.H3("Bankroll"),
-        bankroll_chart(habits.bankroll_series(conn), "bankroll-overview"),
     ]
 
 
@@ -644,11 +658,12 @@ app.layout = layout
 
 
 @app.callback(Output("tiles", "children"), Output("overview-body", "children"), Output("bankroll-overview-data", "data"),
-              Input("scope", "value"), prevent_initial_call=True)
-def scope_overview(scope):
+              Input("scope", "value"), Input("range", "value"), prevent_initial_call=True)
+def scope_overview(scope, span="All"):
     with closing(archive.connect()) as conn:
         venues = SCOPES[scope]
-        return tiles(conn, venues), overview_body(conn, venues), bankroll_figure(habits.bankroll_series(conn, venues))
+        series = windowed(habits.bankroll_series(conn, venues), RANGES[span])
+        return tiles(conn, venues), overview_body(conn, venues), bankroll_figure(series)
 
 
 @app.callback(Output("clv-singles-sum", "children"), Output("clv-singles-list", "children"),

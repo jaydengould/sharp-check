@@ -138,3 +138,13 @@ def test_sync_reloads_on_success_and_names_failures(monkeypatch):
     assert "polymarket close abc" in app.sync(1)[1]
     monkeypatch.setattr(app.subprocess, "run", lambda *a, **k: Run(1, "", "Traceback\nKeyError: 'secret'"))
     assert app.sync(1)[1] == "Sync partly failed (KeyError); reload to see what did sync"
+
+
+def test_windowed_anchors_at_cutoff_and_restarts_pnl():
+    from datetime import datetime, timezone
+    s = [("2026-01-01T00:00:00.000000Z", 100, 0), ("2026-01-05T00:00:00.000000Z", 110, 10),
+         ("2026-01-09T00:00:00.000000Z", 104, 4)]
+    now = datetime(2026, 1, 10, tzinfo=timezone.utc)
+    assert app.windowed(s, None, now) == s
+    assert app.windowed(s, 7, now) == [("2026-01-03T00:00:00.000000Z", 100, 0), s[1], (s[2][0], 104, 4)]
+    assert app.windowed(s, 3, now) == [("2026-01-07T00:00:00.000000Z", 110, 0), (s[2][0], 104, -6)]
