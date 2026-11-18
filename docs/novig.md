@@ -26,6 +26,8 @@ Read-only. Host `https://api.novig.com` (v3). Client: `clients.novig_get` / `nov
 - Normalize: DEPOSIT/WITHDRAWAL → deposit/withdrawal; FILL/FEE/MAKER_CREDIT of a visible fill and SETTLEMENT of a visible market are skipped (fills and settlements carry them); other FILL/FEE/SETTLEMENT and FORWARDING/CREDIT → `untracked_bet`; any other kind fails the rebuild.
 
 ## Fees
+- Charged at the fill, never on winnings (support page "Fees on Novig"; the ledger's FEE rows share the fill's timestamp). Pregame straights and maker fills pay nothing.
+- Selling (cash-out) exists for eligible cash-funded straights, not parlays or trade-credit positions: Novig places an offsetting order on the other outcome (Help Center, 2026-10-20). That's the exit model normalize assumes.
 - Taker only: `c · P(1−P) · N · 1¢`, `c` from the market. Game markets charge only while in play (`charged: WHEN_LIVE`). The fill's `fee` is absent when uncharged.
 
 ## Market types
