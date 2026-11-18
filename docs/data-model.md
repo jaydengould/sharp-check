@@ -30,7 +30,7 @@ UTC timestamps, money as integer micro-dollars. This is the planned schema. Upda
 
 ### `fills`
 - Columns: `venue, fill_id, order_id, market_id, outcome, qty, price, fee, is_taker, ts`.
-- Every fill is normalized to "acquire `outcome` at `price`". Novig: `outcome` = yes for `outcomes[0]`; `qty` = Novig qty ÷ 100 (1¢ contracts as $1 equivalents). `outcome` is `yes|no` on both venues (Polymarket long = yes). `price` is micro-dollars per contract of that outcome; `qty` is REAL (fractional contracts); negative `fee` = rebate.
+- Every fill is normalized to "acquire `outcome` at `price`". Novig: `outcome` = yes for `outcomes[0]`; `qty` = Novig qty ÷ 100 (1¢ contracts as $1 equivalents). `outcome` is `yes|no` on every venue (Polymarket long = yes). `price` is micro-dollars per contract of that outcome; `qty` is REAL (fractional contracts); negative `fee` = rebate.
 - `qty` sums are floats: round (e.g. to 4 decimals) before testing whether a position is flat. Raw sums come out as `-0.0` or 1e-15.
 - Built by `sharp_check/normalize.py` (`python -m sharp_check.normalize`), which drops and refills it from `raw_pages`.
 
